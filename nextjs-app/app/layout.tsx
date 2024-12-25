@@ -1,90 +1,66 @@
-import "./globals.css";
+'use client'
 
-import { SpeedInsights } from "@vercel/speed-insights/next";
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import { draftMode } from "next/headers";
-import { VisualEditing, toPlainText } from "next-sanity";
-import { Toaster } from "sonner";
+import { Inter } from 'next/font/google'
+import { usePathname } from 'next/navigation'
+import Script from 'next/script'
+import { useEffect, useState } from 'react'
+import { Toaster } from 'sonner'
+import Footer from './components/Footer'
+import Header from './components/Header'
+import { ScrollToTop } from './components/ScrollToTop'
+import './globals.css'
 
-import DraftModeToast from "@/app/components/DraftModeToast";
-import Footer from "@/app/components/Footer";
-import Header from "@/app/components/Header";
-import * as demo from "@/sanity/lib/demo";
-import { sanityFetch, SanityLive } from "@/sanity/lib/live";
-import { settingsQuery } from "@/sanity/lib/queries";
-import { resolveOpenGraphImage } from "@/sanity/lib/utils";
-import { handleError } from "./client-utils";
+const inter = Inter({ subsets: ['latin'] })
 
-/**
- * Generate metadata for the page.
- * Learn more: https://nextjs.org/docs/app/api-reference/functions/generate-metadata#generatemetadata-function
- */
-export async function generateMetadata(): Promise<Metadata> {
-  const { data: settings } = await sanityFetch({
-    query: settingsQuery,
-    // Metadata should never contain stega
-    stega: false,
-  });
-  const title = settings?.title || demo.title;
-  const description = settings?.description || demo.description;
-
-  const ogImage = resolveOpenGraphImage(settings?.ogImage);
-  let metadataBase: URL | undefined = undefined;
-  try {
-    metadataBase = settings?.ogImage?.metadataBase
-      ? new URL(settings.ogImage.metadataBase)
-      : undefined;
-  } catch {
-    // ignore
-  }
-  return {
-    metadataBase,
-    title: {
-      template: `%s | ${title}`,
-      default: title,
-    },
-    description: toPlainText(description),
-    openGraph: {
-      images: ogImage ? [ogImage] : [],
-    },
-  };
-}
-
-const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
-  display: "swap",
-});
-
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode;
+  children: React.ReactNode
 }) {
-  const { isEnabled: isDraftMode } = await draftMode();
+  const [isAtTop, setIsAtTop] = useState(true)
+  const pathname = usePathname()
+  const isHomePage = pathname === '/about'
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY
+      setIsAtTop(scrollPosition < 50)
+    }
+
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
 
   return (
-    <html lang="en" className={`${inter.variable} bg-white text-black`}>
-      <body>
-        <section className="min-h-screen pt-24">
-          {/* The <Toaster> component is responsible for rendering toast notifications used in /app/client-utils.ts and /app/components/DraftModeToast.tsx */}
-          <Toaster />
-          {isDraftMode && (
-            <>
-              <DraftModeToast />
-              {/*  Enable Visual Editing, only to be rendered when Draft Mode is enabled */}
-              <VisualEditing />
-            </>
-          )}
-          {/* The <SanityLive> component is responsible for making all sanityFetch calls in your application live, so should always be rendered. */}
-          <SanityLive onError={handleError} />
-          <Header />
-          <main className="">{children}</main>
-          <Footer />
-        </section>
-        <SpeedInsights />
+    <html lang="en">
+      <body className={`${inter.className} antialiased`}>
+        <Header 
+          className={
+            isHomePage && isAtTop 
+              ? '!bg-transparent text-white border-none' 
+              : undefined
+          } 
+        />
+        <ScrollToTop />
+        {children}
+        <Footer />
+        <Toaster 
+          position="top-center" 
+          expand={true} 
+          richColors 
+          closeButton
+          theme="system"
+          duration={4000}
+          style={{ 
+            transition: 'all 0.2s ease-out' 
+          }}
+        />
+        <Script
+          src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"
+          strategy="lazyOnload"
+        />
       </body>
     </html>
-  );
+  )
 }
+

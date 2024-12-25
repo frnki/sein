@@ -1,0 +1,5 @@
+export const SECTION_PADDING = 'py-24 md:py-32'
+export const CONTAINER = 'container mx-auto px-4'
+export const SECTION_TITLE = 'text-3xl md:text-4xl font-bold mb-4'
+export const SECTION_SUBTITLE = 'text-gray-600 text-lg'
+export const GRID_LAYOUT = 'grid gap-8' 
