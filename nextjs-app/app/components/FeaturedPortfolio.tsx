@@ -8,35 +8,35 @@ import { CONTAINER, SECTION_PADDING, SECTION_SUBTITLE, SECTION_TITLE } from '../
 const portfolios = [
   {
     id: 1,
-    title: '성수동 복합문화공간',
-    category: '상업공간',
-    image: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=2053',
+    title: '서울숲 복합문화공원',
+    category: '공원시설',
+    image: 'https://images.unsplash.com/photo-1584466977773-e625c37cdd50?q=80&w=2067',
     year: '2024',
     location: '서울 성동구'
   },
   {
     id: 2,
-    title: '판교 스마트오피스',
-    category: '오피스',
-    image: 'https://images.unsplash.com/photo-1497366811353-6870744d04b2?q=80&w=2069',
+    title: '판교 테크노밸리 휴게공간',
+    category: '파고라',
+    image: 'https://images.unsplash.com/photo-1498036882173-b41c28a8ba34?q=80&w=2400&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     year: '2023',
     location: '경기 성남시'
   },
   {
     id: 3,
-    title: '해운대 프리미엄 레지던스',
-    category: '주거공간',
-    image: 'https://images.unsplash.com/photo-1600566752355-35792bedcfea?q=80&w=2070',
+    title: '해운대 해변 공공시설',
+    category: '공공시설물',
+    image: 'https://images.unsplash.com/photo-1496564203457-11bb12075d90?q=80&w=2070',
     year: '2023',
     location: '부산 해운대구'
   },
   {
     id: 4,
-    title: '제주 자연친화 리조트',
-    category: '리조트',
-    image: 'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?q=80&w=2053',
+    title: '제주 생태공원 쉼터',
+    category: '특수구조물',
+    image: 'https://images.unsplash.com/photo-1519642918688-7e43b19245d8?q=80&w=2076',
     year: '2023',
-    location: '��주시'
+    location: '제주시'
   }
 ]
 
@@ -46,7 +46,7 @@ export default function FeaturedPortfolio() {
       <div className={CONTAINER}>
         <motion.div className="flex justify-between items-end mb-16">
           <div>
-            <h2 className={SECTION_TITLE}>대표 프로젝트</h2>
+            <h2 className={SECTION_TITLE}>대표 포트폴리오</h2>
             <p className={SECTION_SUBTITLE}>
               세인디자인이 만든 특별한 공간들을 소개합니다
             </p>

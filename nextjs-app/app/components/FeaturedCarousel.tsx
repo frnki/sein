@@ -1,51 +1,42 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import Image from 'next/image'
+import { Button } from '@/components/ui/button'
 import useEmblaCarousel from 'embla-carousel-react'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent } from '@/components/ui/card'
+import Image from 'next/image'
+import { useEffect, useState } from 'react'
 
-const featuredProducts = [
+const carouselImages = [
   {
     id: 1,
-    name: '친수형 파고라 A-Type',
-    image: '/placeholder.svg?height=400&width=600',
-    code: 'SP1545-1',
+    title: '서울숲 복합문화공원',
+    description: '도심 속 휴식 공간을 위한 혁신적인 디자인',
+    image: '/images/banner-acrotower.jpg'
   },
   {
     id: 2,
-    name: '친수형 파고라 B-Type',
-    image: '/placeholder.svg?height=400&width=600',
-    code: 'SP1544',
+    title: '판교 테크노밸리',
+    description: '첨단 기술과 조화를 이루는 휴게 공간',
+    image: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070'
   },
   {
     id: 3,
-    name: '친수형 파고라 C-Type',
-    image: '/placeholder.svg?height=400&width=600',
-    code: 'SP1543',
+    title: '해운대 해변 공공시설',
+    description: '자연과 도시가 공존하는 공공 디자인',
+    image: 'https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=2071'
   },
   {
     id: 4,
-    name: '친수형 파고라 D-Type',
-    image: '/placeholder.svg?height=400&width=600',
-    code: 'SP1542',
+    title: '스마트시티 프로젝트',
+    description: '미래 도시를 위한 스마트 솔루션',
+    image: 'https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2069'
   },
-  {
-    id: 5,
-    name: '친수형 파고라 E-Type',
-    image: '/placeholder.svg?height=400&width=600',
-    code: 'SP1541',
-  },
-] // Add up to 10 products
+]
 
 export default function FeaturedCarousel() {
   const [emblaRef, emblaApi] = useEmblaCarousel({
-    align: 'start',
-    loop: false,
-    skipSnaps: false,
-    dragFree: true,
+    loop: true,
+    duration: 30,
   })
 
   const [prevBtnEnabled, setPrevBtnEnabled] = useState(false)
@@ -71,54 +62,52 @@ export default function FeaturedCarousel() {
   }, [emblaApi])
 
   return (
-    <div className="bg-gray-50 py-12">
-      <div className="container mx-auto px-4">
-        <h2 className="text-3xl font-bold mb-8">대표 상품</h2>
-        <div className="relative">
-          <div className="overflow-hidden" ref={emblaRef}>
-            <div className="flex gap-6">
-              {featuredProducts.map((product) => (
-                <div key={product.id} className="flex-[0_0_40%] min-w-0 md:flex-[0_0_30%]">
-                  <Card>
-                    <CardContent className="p-0">
-                      <div className="relative aspect-[4/3]">
-                        <Image
-                          src={product.image}
-                          alt={product.name}
-                          fill
-                          className="object-cover"
-                        />
-                      </div>
-                      <div className="p-4">
-                        <h3 className="font-semibold">{product.name}</h3>
-                        <p className="text-sm text-gray-600">{product.code}</p>
-                      </div>
-                    </CardContent>
-                  </Card>
+    <div className="relative bg-black">
+      <div className="overflow-hidden" ref={emblaRef}>
+        <div className="flex">
+          {carouselImages.map((item) => (
+            <div key={item.id} className="flex-[0_0_100%] min-w-0">
+              <div className="relative h-[600px]">
+                <Image
+                  src={item.image}
+                  alt={item.title}
+                  fill
+                  className="object-cover"
+                  priority
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                <div className="absolute bottom-0 left-0 right-0 p-8 md:p-16">
+                  <div className="container mx-auto">
+                    <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+                      {item.title}
+                    </h2>
+                    <p className="text-lg md:text-xl text-white/80">
+                      {item.description}
+                    </p>
+                  </div>
                 </div>
-              ))}
+              </div>
             </div>
-          </div>
-          <Button
-            variant="outline"
-            size="icon"
-            className="absolute left-4 top-1/2 -translate-y-1/2 bg-white"
-            onClick={scrollPrev}
-            disabled={!prevBtnEnabled}
-          >
-            <ChevronLeft className="h-4 w-4" />
-          </Button>
-          <Button
-            variant="outline"
-            size="icon"
-            className="absolute right-4 top-1/2 -translate-y-1/2 bg-white"
-            onClick={scrollNext}
-            disabled={!nextBtnEnabled}
-          >
-            <ChevronRight className="h-4 w-4" />
-          </Button>
+          ))}
         </div>
       </div>
+
+      <Button
+        variant="outline"
+        size="icon"
+        className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 border-white/20"
+        onClick={scrollPrev}
+      >
+        <ChevronLeft className="h-4 w-4 text-white" />
+      </Button>
+      <Button
+        variant="outline"
+        size="icon"
+        className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 border-white/20"
+        onClick={scrollNext}
+      >
+        <ChevronRight className="h-4 w-4 text-white" />
+      </Button>
     </div>
   )
 }

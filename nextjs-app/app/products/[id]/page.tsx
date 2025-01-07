@@ -1,14 +1,14 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { Button } from '@/components/ui/button'
+import { ChevronLeft, ChevronRight, Share2 } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Share2, ChevronLeft, ChevronRight } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import Header from '../../components/Header'
-import { useProductStore } from '../../lib/store'
+import { useEffect, useState } from 'react'
 import FloatingButton from '../../components/FloatingButton'
+import Header from '../../components/Header'
 import RelatedProductsCarousel from '../../components/RelatedProductsCarousel'
+import { useProductStore } from '../../lib/store'
 
 // Mock product data - in real app, this would come from an API
 const product = {
@@ -180,7 +180,7 @@ export default function ProductDetail() {
 
               <div className="flex gap-4">
                 <Button variant="outline" className="flex-1 h-12 text-lg">관심 상품 추가</Button>
-                <Button className="flex-1 h-12 text-lg">문의하기</Button>
+                <Button className="flex-1 h-12 text-lg text-white">문의하기</Button>
               </div>
             </div>
           </div>

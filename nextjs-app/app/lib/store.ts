@@ -1,23 +1,17 @@
 import { create } from 'zustand'
-import { SelectedProduct } from '../types/product'
 
 interface ProductStore {
-  selectedProducts: SelectedProduct[]
-  addProduct: (product: SelectedProduct) => void
-  removeProduct: (productId: string) => void
-  clearProducts: () => void
+  selectedProducts: string[]
+  toggleProduct: (productId: string) => void
 }
 
 export const useProductStore = create<ProductStore>((set) => ({
   selectedProducts: [],
-  addProduct: (product) =>
+  toggleProduct: (productId) => 
     set((state) => ({
-      selectedProducts: [...state.selectedProducts, product],
+      selectedProducts: state.selectedProducts.includes(productId)
+        ? state.selectedProducts.filter(id => id !== productId)
+        : [...state.selectedProducts, productId]
     })),
-  removeProduct: (productId) =>
-    set((state) => ({
-      selectedProducts: state.selectedProducts.filter((p) => p.id !== productId),
-    })),
-  clearProducts: () => set({ selectedProducts: [] }),
 }))
 

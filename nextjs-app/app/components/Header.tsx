@@ -1,5 +1,5 @@
-import Link from 'next/link'
 import Image from 'next/image'
+import Link from 'next/link'
 
 export default function Header({ className = '' }: { className?: string }) {
   const isTransparent = className.includes('bg-transparent')
@@ -7,9 +7,9 @@ export default function Header({ className = '' }: { className?: string }) {
   return (
     <header className={`fixed top-0 left-0 right-0 z-50 py-3 px-6 bg-white border-b transition-all duration-300 ${className}`}>
       <nav className="container mx-auto flex items-center justify-between">
-        <Link href="/" className="w-[80px] h-[30px] relative">
+        <Link href="/" className="w-[100px] h-[30px] relative">
           <Image
-            src="https://fvowvmrpscdksrlozbxu.supabase.co/storage/v1/object/public/images/sein_logo_1.png"
+            src="/images/Sein_logo.png"
             alt="SEIN Logo"
             fill
             priority

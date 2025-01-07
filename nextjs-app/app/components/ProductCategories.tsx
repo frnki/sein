@@ -7,30 +7,30 @@ import { CONTAINER, SECTION_PADDING, SECTION_SUBTITLE, SECTION_TITLE } from '../
 const categories = [
   {
     id: 1,
-    title: '주거공간',
-    description: '편안하고 아늑한 주거 공간 디자인',
-    image: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=2075&auto=format&fit=crop',
+    title: '파고라',
+    description: '정교한 디테일로 완성되는 프리미엄 파고라',
+    image: 'https://images.unsplash.com/photo-1600566753151-384129cf4e3e?q=80&w=2070',
     count: 24
   },
   {
     id: 2,
-    title: '상업공간',
-    description: '브랜드 가치를 높이는 상업 공간',
-    image: 'https://images.unsplash.com/photo-1554118811-1e0d58224f24?q=80&w=2047&auto=format&fit=crop',
+    title: '어닝',
+    description: '공간의 가치를 높이는 맞춤형 디자인',
+    image: 'https://images.unsplash.com/photo-1697609709300-d7409f2c2459?q=80&w=3027&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     count: 18
   },
   {
     id: 3,
-    title: '공용공간',
-    description: '모두를 위한 열린 공공 공간',
-    image: 'https://images.unsplash.com/photo-1517457373958-b7bdd4587205?q=80&w=2069&auto=format&fit=crop',
+    title: '공공시설물',
+    description: '세심한 완성도의 도시 경관 디자인',
+    image: 'https://images.unsplash.com/photo-1601600576337-c1d8a0d1373c?q=80&w=2071',
     count: 12
   },
   {
     id: 4,
-    title: '특수공간',
-    description: '목적에 최적화된 특수 공간',
-    image: 'https://images.unsplash.com/photo-1604014237800-1c9102c219da?q=80&w=2070&auto=format&fit=crop',
+    title: '특수구조물',
+    description: '디테일한 설계로 완성되는 특수 구조물',
+    image: 'https://images.unsplash.com/photo-1496564203457-11bb12075d90?q=80&w=2070',
     count: 8
   }
 ]
@@ -44,9 +44,9 @@ export default function ProductCategories() {
           whileInView={{ opacity: 1, y: 0 }}
           className="text-center mb-16"
         >
-          <h2 className={SECTION_TITLE}>공간 디자인</h2>
+          <h2 className={SECTION_TITLE}>디테일이 만드는 차이</h2>
           <p className={SECTION_SUBTITLE}>
-            목적에 맞는 최적의 공간 솔루션을 제안합니다
+            세심한 디테일로 완성되는 최적의 공간 솔루션
           </p>
         </motion.div>
         

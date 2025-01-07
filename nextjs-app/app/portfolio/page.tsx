@@ -1,11 +1,9 @@
 'use client'
 
-import { useState } from 'react'
-import Image from 'next/image'
-import { useRouter } from 'next/navigation'
-import { Search } from 'lucide-react'
+import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 import {
   Select,
   SelectContent,
@@ -13,10 +11,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { Badge } from '@/components/ui/badge'
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
+import { Search } from 'lucide-react'
+import Image from 'next/image'
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
 import Header from '../components/Header'
-import { Label } from '@/components/ui/label'
 
 // Generate more realistic mock data
 const portfolioItems = Array.from({ length: 100 }, (_, i) => ({
@@ -89,10 +88,9 @@ export default function PortfolioPage() {
     <div className="min-h-screen bg-white">
       <Header />
       <main className="pt-16">
-        <div className="container mx-auto px-4 py-8">
-          <div className="mb-8">
+        <div className="container mx-auto px-4 py-8 space-y-8">
+          <div>
             <h1 className="text-3xl font-bold mb-6">포트폴리오</h1>
-            
             <div className="space-y-6">
               {/* Filters Row */}
               <div className="flex flex-wrap gap-4 items-end">
@@ -238,4 +236,3 @@ export default function PortfolioPage() {
     </div>
   )
 }
-
