@@ -20,7 +20,7 @@ export default function Header({ className = '' }: { className?: string }) {
         <div className="flex space-x-4 text-[12px] absolute left-1/2 transform -translate-x-1/2">
           <Link href="/about" className="hover:opacity-60 transition-opacity">About</Link>
           <Link href="/products" className="hover:opacity-60 transition-opacity">Products</Link>
-          <Link href="/portfolio" className="hover:opacity-60 transition-opacity">Portfolio</Link>
+          <Link href="/projects" className="hover:opacity-60 transition-opacity">Projects</Link>
           <Link href="/news" className="hover:opacity-60 transition-opacity">News</Link>
         </div>
 

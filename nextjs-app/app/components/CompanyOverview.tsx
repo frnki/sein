@@ -258,7 +258,7 @@ export default function CompanyOverview() {
                 variant="outline"
                 className="border-white text-white hover:bg-white hover:text-black text-lg px-8 py-6"
               >
-                <Link href="/portfolio">View All Projects</Link>
+                <Link href="/projects">View All Projects</Link>
               </Button>
             </div>
           </motion.div>

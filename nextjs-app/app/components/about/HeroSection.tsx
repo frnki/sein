@@ -1,11 +1,11 @@
 'use client'
 
-import { useRef, useEffect } from 'react'
-import { motion, useScroll, useTransform } from 'framer-motion'
-import { Canvas } from '@react-three/fiber'
-import { Environment } from '@react-three/drei'
-import Link from 'next/link'
 import { Button } from '@/components/ui/button'
+import { Environment } from '@react-three/drei'
+import { Canvas } from '@react-three/fiber'
+import { motion, useScroll, useTransform } from 'framer-motion'
+import Link from 'next/link'
+import { useRef } from 'react'
 import { DynamicRing } from './DynamicRing'
 
 export default function HeroSection() {
@@ -71,7 +71,7 @@ export default function HeroSection() {
                       size="lg"
                       className="bg-white text-black hover:bg-white/90 transition-all duration-300 text-base"
                     >
-                      <Link href="/portfolio">
+                      <Link href="/projects">
                         포트폴리오 보기
                       </Link>
                     </Button>

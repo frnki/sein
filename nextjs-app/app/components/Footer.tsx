@@ -4,7 +4,7 @@ import Link from 'next/link'
 const mainNavLinks = [
   { title: 'About', href: '/about' },
   { title: 'Products', href: '/products' },
-  { title: 'Portfolio', href: '/portfolio' },
+  { title: 'Projects', href: '/projects' },
   { title: 'News', href: '/news' },
   { title: 'Support', href: '/support' },
   { title: 'Contact', href: '/contact' },

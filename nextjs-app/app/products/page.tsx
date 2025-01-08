@@ -1,22 +1,14 @@
 'use client'
 
 import { useState } from 'react'
+import FeaturedCarousel from '../components/FeaturedCarousel'
 import Header from '../components/Header'
+import InquiryDialog from '../components/InquiryDialog'
 import ProductFilter from '../components/ProductFilter'
 import ProductGrid from '../components/ProductGrid'
-import ProductSearch from '../components/ProductSearch'
-import FeaturedCarousel from '../components/FeaturedCarousel'
+import ProductHeader from '../components/ProductHeader'
 import SelectedProductsPanel from '../components/SelectedProductsPanel'
-import InquiryDialog from '../components/InquiryDialog'
-import FloatingButton from '../components/FloatingButton'
 import { useProductStore } from '../lib/store'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
 
 // Generate 100 mock products
 const mockProducts = Array.from({ length: 100 }, (_, i) => ({
@@ -122,29 +114,13 @@ export default function ProductsPage() {
             onFilterChange={handleFilterChange}
           />
           <div className="flex-1">
-            <div className="p-4 border-b flex justify-between items-center">
-              <div className="flex items-center gap-4">
-                <span>총 {filteredProducts.length}개의 제품</span>
-                {selectedProducts.length > 0 && (
-                  <span className="text-primary">
-                    {selectedProducts.length}개 선택됨
-                  </span>
-                )}
-                <ProductSearch onSearch={setSearchTerm} />
-              </div>
-              <Select
-                value={sortOrder}
-                onValueChange={(value: 'newest' | 'oldest') => setSortOrder(value)}
-              >
-                <SelectTrigger className="w-32">
-                  <SelectValue placeholder="정렬" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="newest">최신순</SelectItem>
-                  <SelectItem value="oldest">오래된순</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
+            <ProductHeader
+              totalProducts={filteredProducts.length}
+              selectedCount={selectedProducts.length}
+              sortOrder={sortOrder}
+              onSortChange={(value: 'newest' | 'oldest') => setSortOrder(value)}
+              onSearch={setSearchTerm}
+            />
             <ProductGrid
               products={filteredProducts}
               sortOrder={sortOrder}
@@ -153,7 +129,6 @@ export default function ProductsPage() {
           {showSelectedPanel && <SelectedProductsPanel onClose={() => setShowSelectedPanel(false)} />}
         </div>
         <InquiryDialog />
-        <FloatingButton onClick={toggleSelectedPanel} />
       </div>
     </div>
   )

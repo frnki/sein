@@ -1,17 +1,36 @@
-import { create } from 'zustand'
+import { create } from 'zustand';
+import { SelectedProduct } from './types/product';
 
 interface ProductStore {
-  selectedProducts: string[]
-  toggleProduct: (productId: string) => void
+  selectedProducts: SelectedProduct[];
+  isInquiryOpen: boolean;
+  toggleProduct: (product: SelectedProduct) => void;
+  addProduct: (product: SelectedProduct) => void;
+  removeProduct: (id: string) => void;
+  clearProducts: () => void;
+  openInquiry: () => void;
+  closeInquiry: () => void;
 }
 
 export const useProductStore = create<ProductStore>((set) => ({
   selectedProducts: [],
-  toggleProduct: (productId) => 
+  isInquiryOpen: false,
+  toggleProduct: (product) =>
     set((state) => ({
-      selectedProducts: state.selectedProducts.includes(productId)
-        ? state.selectedProducts.filter(id => id !== productId)
-        : [...state.selectedProducts, productId]
+      selectedProducts: state.selectedProducts.some(p => p.id === product.id)
+        ? state.selectedProducts.filter(p => p.id !== product.id)
+        : [...state.selectedProducts, product],
     })),
-}))
+  addProduct: (product) =>
+    set((state) => ({
+      selectedProducts: [...state.selectedProducts, product],
+    })),
+  removeProduct: (id) =>
+    set((state) => ({
+      selectedProducts: state.selectedProducts.filter(p => p.id !== id),
+    })),
+  clearProducts: () => set({ selectedProducts: [] }),
+  openInquiry: () => set({ isInquiryOpen: true }),
+  closeInquiry: () => set({ isInquiryOpen: false }),
+}));
 

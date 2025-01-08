@@ -1,18 +1,16 @@
 'use client'
 
+import { Button } from '@/components/ui/button'
 import { X } from 'lucide-react'
 import Image from 'next/image'
 import { useProductStore } from '../lib/store'
-import { Button } from '@/components/ui/button'
-import { useInquiryDialog } from './InquiryDialog'
 
 interface SelectedProductsPanelProps {
   onClose: () => void
 }
 
 export default function SelectedProductsPanel({ onClose }: SelectedProductsPanelProps) {
-  const { selectedProducts, removeProduct, clearProducts } = useProductStore()
-  const { openDialog } = useInquiryDialog()
+  const { selectedProducts, removeProduct, clearProducts, openInquiry } = useProductStore()
 
   if (selectedProducts.length === 0) {
     return (
@@ -71,7 +69,7 @@ export default function SelectedProductsPanel({ onClose }: SelectedProductsPanel
         ))}
       </div>
       <div className="absolute bottom-4 left-4 right-4">
-        <Button className="w-full" onClick={openDialog}>
+        <Button className="w-full" onClick={openInquiry}>
           문의하기
         </Button>
       </div>

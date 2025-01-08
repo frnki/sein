@@ -52,7 +52,7 @@ export default function FeaturedPortfolio() {
             </p>
           </div>
           <Link 
-            href="/portfolio"
+            href="/projects"
             className="text-sm font-medium hover:text-blue-600 transition-colors"
           >
             더 보기 →
