@@ -106,9 +106,9 @@ export default function ProductsPage() {
   return (
     <div className="min-h-screen bg-white">
       <Header />
-      <div className="pt-16">
+      <div className="pt-[var(--header-height)]">
         <FeaturedCarousel />
-        <div className="flex">
+        <div className="flex container mx-auto">
           <ProductFilter
             filters={mockFilters}
             onFilterChange={handleFilterChange}

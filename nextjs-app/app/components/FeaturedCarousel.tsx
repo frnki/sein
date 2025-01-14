@@ -67,7 +67,7 @@ export default function FeaturedCarousel() {
         <div className="flex">
           {carouselImages.map((item) => (
             <div key={item.id} className="flex-[0_0_100%] min-w-0">
-              <div className="relative h-[600px]">
+              <div className="relative h-[60vh]">
                 <Image
                   src={item.image}
                   alt={item.title}

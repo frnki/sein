@@ -1,12 +1,12 @@
 'use client'
 
-import { useState } from 'react'
-import Header from '../components/Header'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Phone, Mail, MessageCircle, Globe } from 'lucide-react'
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api'
-import InquiryForm from '../components/InquiryForm'
+import { Globe, Mail, MessageCircle, Phone } from 'lucide-react'
+import { useState } from 'react'
 import ContactMethodCard from '../components/ContactMethodCard'
+import Header from '../components/Header'
+import InquiryForm from '../components/InquiryForm'
 
 const locations = {
   headquarters: {
@@ -75,7 +75,7 @@ export default function ContactPage() {
   return (
     <div className="min-h-screen bg-white">
       <Header />
-      <main className="pt-16">
+      <main className="pt-[var(--header-height)]">
         <div className="container mx-auto px-4 py-12">
           {/* Location Maps */}
           <div className="grid md:grid-cols-2 gap-8 mb-16">

@@ -3,7 +3,6 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { MessageSquare, Search, X } from "lucide-react";
 import Image from "next/image";
 import { useProductStore } from "../lib/store";
@@ -11,38 +10,42 @@ import { useProductStore } from "../lib/store";
 interface Props {
   totalProducts: number;
   selectedCount: number;
-  sortOrder: 'newest' | 'oldest';
-  onSortChange: (value: 'newest' | 'oldest') => void;
+  sortOrder: "newest" | "oldest";
+  onSortChange: (value: "newest" | "oldest") => void;
   onSearch: (value: string) => void;
 }
 
-export default function ProductHeader({ totalProducts, selectedCount, sortOrder, onSortChange, onSearch }: Props) {
+export default function ProductHeader({
+  totalProducts,
+  selectedCount,
+  sortOrder,
+  onSortChange,
+  onSearch,
+}: Props) {
   const { selectedProducts, toggleProduct, openInquiry } = useProductStore();
+  const handleCheckboxChange = (id: string) => (e: React.MouseEvent<SVGSVGElement>) => {
+    e.stopPropagation();
+    toggleProduct({
+      id,
+    });
+  };
 
   return (
     <div className="sticky top-[57px] bg-white z-40 border-b">
       <div className="p-4">
-        <div className="flex items-center justify-between mb-4">
-          <div className="text-sm text-gray-600">
-            총 <span className="font-bold text-primary">{totalProducts}</span>개의 제품
+        <div className="flex items-center justify-between gap-4">
+          <div className="relative flex-1">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-4 w-4" />
+            <Input
+              placeholder="제품명 또는 코드로 검색"
+              className="pl-10"
+              onChange={(e) => onSearch(e.target.value)}
+            />
           </div>
-          <Select value={sortOrder} onValueChange={onSortChange}>
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="정렬 방식" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="newest">최신순</SelectItem>
-              <SelectItem value="oldest">오래된순</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-4 w-4" />
-          <Input
-            placeholder="제품명 또는 코드로 검색"
-            className="pl-10"
-            onChange={(e) => onSearch(e.target.value)}
-          />
+          <div className="text-sm text-gray-600 whitespace-nowrap">
+            총 <span className="font-bold text-primary">{totalProducts}</span>
+            개의 제품
+          </div>
         </div>
       </div>
 
@@ -54,8 +57,8 @@ export default function ProductHeader({ totalProducts, selectedCount, sortOrder,
             </span>
             <div className="flex gap-2 overflow-x-auto">
               {selectedProducts.map((product) => (
-                <Badge 
-                  key={product.id} 
+                <Badge
+                  key={product.id}
                   variant="secondary"
                   className="pl-2 pr-3 py-1 flex items-center gap-2"
                 >
@@ -68,9 +71,10 @@ export default function ProductHeader({ totalProducts, selectedCount, sortOrder,
                     />
                   </div>
                   <span>{product.code}</span>
-                  <X 
-                    className="h-3 w-3 cursor-pointer hover:text-red-500" 
-                    onClick={() => toggleProduct(product.id)}
+
+                  <X
+                    onClick={handleCheckboxChange(product.id)}
+                    className="h-3 w-3 hover:text-red-500"
                   />
                 </Badge>
               ))}
@@ -89,4 +93,4 @@ export default function ProductHeader({ totalProducts, selectedCount, sortOrder,
       )}
     </div>
   );
-} 
+}

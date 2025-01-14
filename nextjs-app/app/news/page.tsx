@@ -1,13 +1,13 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { useSearchParams } from 'next/navigation'
-import Header from '../components/Header'
-import NewsTable from '../components/NewsTable'
-import NewsFeed from '../components/NewsFeed'
-import NewsContent from '../components/NewsContent'
 import { Button } from '@/components/ui/button'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { useSearchParams } from 'next/navigation'
+import { useEffect, useState } from 'react'
+import Header from '../components/Header'
+import NewsContent from '../components/NewsContent'
+import NewsFeed from '../components/NewsFeed'
+import NewsTable from '../components/NewsTable'
 import { useMediaQuery } from '../hooks/use-media-query'
 
 // Generate 100 mock news items
@@ -73,7 +73,7 @@ export default function NewsPage() {
   return (
     <div className="min-h-screen bg-white">
       <Header />
-      <main className="pt-16">
+      <main className="pt-[var(--header-height)]">
         <div className="container mx-auto px-4 py-8">
           <div className="flex flex-col md:flex-row">
             <div className="w-full md:w-1/2 md:pr-4 border-r overflow-y-auto" style={{ height: 'calc(100vh - 4rem)' }}>

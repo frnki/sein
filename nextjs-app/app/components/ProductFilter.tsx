@@ -7,6 +7,7 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion';
 import { Checkbox } from '@/components/ui/checkbox';
+import { useMemo } from 'react';
 
 interface SubCategory {
   id: string;
@@ -27,11 +28,15 @@ interface ProductFilterProps {
 }
 
 export default function ProductFilter({ filters, onFilterChange }: ProductFilterProps) {
+  const defaultExpandedFilters = useMemo(() => {
+    return filters.length > 0 ? [filters[0].id] : [];
+  }, [filters]);
+
   return (
     <div className="w-64 bg-white border-r sticky top-[64px] h-[calc(100vh-64px)]">
       <div className="p-4">
         <h2 className="text-lg font-semibold mb-4">필터</h2>
-        <Accordion type="multiple" className="space-y-2">
+        <Accordion type="multiple" defaultValue={defaultExpandedFilters} className="space-y-2">
           {filters.map((filter) => (
             <AccordionItem key={filter.id} value={filter.id}>
               <AccordionTrigger className="hover:no-underline">

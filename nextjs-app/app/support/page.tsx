@@ -23,7 +23,7 @@ export default function SupportPage() {
   return (
     <div className="min-h-screen bg-white">
       <Header />
-      <main className="pt-16">
+      <main className="pt-[var(--header-height)]">
         <div className="container mx-auto px-4 py-16 max-w-6xl">
           {/* 페이지 헤더 */}
           <div className="mb-16 max-w-3xl">

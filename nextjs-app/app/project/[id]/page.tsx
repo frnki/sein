@@ -77,7 +77,7 @@ export default function PortfolioDetail() {
   return (
     <div className="min-h-screen bg-white">
       <Header />
-      <main className="pt-16">
+      <main className="pt-[var(--header-height)]">
         <div className="container mx-auto px-4 py-12">
           {/* Main Content Grid */}
           <div className="grid md:grid-cols-2 gap-12">
