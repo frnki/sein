@@ -76,7 +76,7 @@ export default function RelatedProductsCarousel({ category }: RelatedProductsCar
   
   return (
     <div className="mt-24">
-      <h2 className="text-2xl font-bold mb-8">다른 {category} 제품</h2>
+      <h2 className="text-2xl font-bold mb-4">다른 {category} 제품</h2>
       <div className="relative">
         <div className="overflow-hidden" ref={emblaRef}>
           <div className="flex space-x-4">

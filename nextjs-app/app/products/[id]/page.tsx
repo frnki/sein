@@ -61,7 +61,8 @@ const relatedProducts = [
 ];
 
 export default function ProductDetail() {
-  const { addProduct, removeProduct, openInquiry, selectedProducts } = useProductStore();
+  const { addProduct, removeProduct, openInquiry, selectedProducts } =
+    useProductStore();
   const [selectedImage, setSelectedImage] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
   const [showSelectedPanel, setShowSelectedPanel] = useState(false);
@@ -75,7 +76,7 @@ export default function ProductDetail() {
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
-  const isProductSelected = selectedProducts.some(p => p.id === product.id);
+  const isProductSelected = selectedProducts.some((p) => p.id === product.id);
 
   const handleInquiry = () => {
     // 현재 제품을 선택된 제품에 추가하고 문의 다이얼로그 열기
@@ -127,9 +128,10 @@ export default function ProductDetail() {
                         key={index}
                         onClick={() => setSelectedImage(index)}
                         className={`relative flex-shrink-0 w-24 h-24 rounded-lg overflow-hidden 
-                          ${selectedImage === index 
-                            ? 'ring-2 ring-black' 
-                            : 'ring-1 ring-gray-200 hover:ring-gray-300'
+                          ${
+                            selectedImage === index
+                              ? "ring-2 ring-black"
+                              : "ring-1 ring-gray-200 hover:ring-gray-300"
                           }`}
                       >
                         <Image
@@ -187,7 +189,7 @@ export default function ProductDetail() {
                   disabled={isProductSelected}
                 >
                   <ShoppingCart className="mr-2 h-5 w-5" />
-                  {isProductSelected ? '추가됨' : '관심 상품 추가'}
+                  {isProductSelected ? "추가됨" : "관심 상품 추가"}
                 </Button>
                 <Button
                   className="flex-1 h-12 text-lg text-white"
@@ -198,47 +200,14 @@ export default function ProductDetail() {
               </div>
             </div>
           </div>
-
-          {/* Related Products
-          <div className="mt-24">
-            <h2 className="text-2xl font-bold mb-8">
-              다른 {product.category} 제품
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {relatedProducts.map((relatedProduct) => (
-                <Link
-                  key={relatedProduct.id}
-                  href={`/products/${relatedProduct.id}`}
-                  className="group"
-                >
-                  <div className="relative aspect-4/3 overflow-hidden rounded-lg mb-4">
-                    <Image
-                      src={relatedProduct.image}
-                      alt={relatedProduct.name}
-                      fill
-                      className="object-cover transition-transform duration-700 group-hover:scale-110"
-                    />
-                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300" />
-                  </div>
-                  <h3 className="font-semibold mb-1">{relatedProduct.name}</h3>
-                  <p className="text-sm text-gray-600">{relatedProduct.code}</p>
-                </Link>
-              ))}
-            </div>
-          </div> */}
           <RelatedProductsCarousel category={product.category} />
-          {/* <FloatingButton onClick={() => addProduct({
-            id: product.id,
-            code: product.code,
-            image: product.images[0],
-          })} /> */}
         </div>
       </main>
       <InquiryDialog />
       {showSelectedPanel && (
         <SelectedProductsPanel onClose={() => setShowSelectedPanel(false)} />
       )}
-      
+
       {/* Floating Cart Button */}
       <Button
         onClick={() => setShowSelectedPanel(true)}
