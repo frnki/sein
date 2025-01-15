@@ -1,12 +1,8 @@
-'use client'
-
 import { Inter } from 'next/font/google'
-import { usePathname } from 'next/navigation'
 import Script from 'next/script'
-import { useEffect, useState } from 'react'
 import { Toaster } from 'sonner'
 import Footer from './components/Footer'
-import Header from './components/Header'
+import { HeaderWrapper } from './components/HeaderWrapper'
 import { ScrollToTop } from './components/ScrollToTop'
 import './globals.css'
 
@@ -17,30 +13,10 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  const [isAtTop, setIsAtTop] = useState(true)
-  const pathname = usePathname()
-  const isHomePage = pathname === '/about' 
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrollPosition = window.scrollY
-      setIsAtTop(scrollPosition < 50)
-    }
-
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
-
   return (
     <html lang="en">
       <body className={`${inter.className} antialiased`}>
-        <Header 
-          className={
-            isHomePage && isAtTop 
-              ? '!bg-transparent text-white border-none' 
-              : undefined
-          } 
-        />
+        <HeaderWrapper />
         <ScrollToTop />
         {children}
         <Footer />

@@ -57,7 +57,7 @@ export default function CompanyOverview() {
             className="text-center"
           >
             <h1 className="text-white text-7xl md:text-9xl font-bold leading-tight mb-8">
-              Every Detail Matters
+            Detail is Everything
             </h1>
             
             <div className="space-y-6">
