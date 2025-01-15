@@ -6,7 +6,7 @@ export default function Header({ className = "" }: { className?: string }) {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 py-4 px-4 bg-white border-b transition-all duration-300 ${className}`}
+      className={`fixed top-0 left-0 right-0 z-50 py-4  bg-white border-b transition-all duration-300 ${className}`}
     >
       <nav className="container mx-auto flex items-center justify-between">
         <Link href="/" className="w-[80px] h-[30px] relative">
@@ -19,7 +19,7 @@ export default function Header({ className = "" }: { className?: string }) {
           />
         </Link>
 
-        <div className="flex space-x-4 text-[12px] absolute left-1/2 transform -translate-x-1/2">
+        <div className="flex space-x-6 text-[13px] font-medium absolute left-1/2 transform -translate-x-1/2">
           <Link href="/about" className="hover:opacity-60 transition-opacity">
             About
           </Link>
@@ -40,9 +40,9 @@ export default function Header({ className = "" }: { className?: string }) {
           </Link>
         </div>
 
-        <div className="flex space-x-4 text-[12px]">
-          <Link href="/support" className="hover:opacity-60 transition-opacity">
-            Support
+        <div className="flex space-x-6 text-[13px] font-medium">
+          <Link href="/download" className="hover:opacity-60 transition-opacity">
+            Download
           </Link>
           <Link href="/contact" className="hover:opacity-60 transition-opacity">
             Contact

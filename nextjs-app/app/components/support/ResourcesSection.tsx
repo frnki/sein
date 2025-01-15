@@ -1,42 +1,50 @@
 'use client'
 
-import { Card } from '@/components/ui/card'
-import { Download } from 'lucide-react'
+import { Card, CardContent } from '@/components/ui/card'
+import { cn } from '@/lib/utils'
+import { ArrowRight, ArrowUpRight, Cog, Dumbbell, Gift, Tag } from 'lucide-react'
 
 const resources = [
   {
     id: 1,
     title: '운동시설물',
     subtitle: '2023 제품자료집',
-    type: 'primary',
+    icon: Dumbbell,
     url: '#'
   },
   {
     id: 2,
     title: '스마트시설물',
     subtitle: '2023 제품자료집',
-    type: 'primary',
+    icon: Cog,
     url: '#'
   },
   {
     id: 3,
     title: '조달제품',
-    subtitle: '2023 조달 카달로그',
-    type: 'primary',
+    subtitle: '2023 조달 카탈로그',
+    icon: Gift,
     url: '#'
   },
   {
     id: 4,
-    title: '물가지자료',
+    title: '물가자료',
     subtitle: '놀이·운동 시설물',
-    type: 'secondary',
+    icon: ArrowUpRight,
     url: '#'
   },
   {
     id: 5,
-    title: '물가지자료',
+    title: '물가자료',
     subtitle: '휴게 시설물',
-    type: 'secondary',
+    icon: ArrowUpRight,
+    url: '#'
+  },
+  {
+    id: 6,
+    title: '24년 6월 거래 가격',
+    subtitle: '거래 가격',
+    icon: Tag,
     url: '#'
   }
 ]
@@ -48,41 +56,44 @@ export default function ResourcesSection() {
   }
 
   return (
-    <Card className="p-8">
-      <div className="max-w-4xl mx-auto">
-        <div className="text-center mb-12">
-          <h2 className="text-2xl font-bold mb-2">PDF 자료집</h2>
-          <p className="text-gray-600">효율적인 업무처리를 위한 공개 데이터입니다. 버튼을 눌러 다운로드 받으세요.</p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {resources.map((resource) => (
-            <button
+    <div className="mx-auto">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {resources.map((resource) => {
+          const Icon = resource.icon
+          return (
+            <Card
               key={resource.id}
-              onClick={() => handleDownload(resource.url)}
-              className="w-full text-left focus:outline-none group"
+              className="transition-all duration-200 hover:shadow-md"
             >
-              <div 
-                className={`
-                  aspect-[4/3] rounded-lg p-6 flex flex-col justify-between
-                  transition-transform duration-200 group-hover:scale-105
-                  ${resource.type === 'primary' 
-                    ? 'bg-[#2B4C32] text-white' 
-                    : 'bg-[#1F2937] text-white'
-                  }
-                `}
-              >
-                <div>
-                  <h3 className="text-2xl font-bold mb-2">{resource.title}</h3>
-                  <p className="text-sm opacity-80">{resource.subtitle}</p>
+              <CardContent className="pt-6">
+                <div className="flex flex-col h-full">
+                  <div className="flex items-center gap-3 mb-3">
+                    <Icon className="w-5 h-5" />
+                    <h3 className="text-lg font-medium">
+                      {resource.title}
+                    </h3>
+                  </div>
+                  <p className="text-sm text-gray-600 mb-4">
+                    {resource.subtitle}
+                  </p>
+                  <button
+                    onClick={() => handleDownload(resource.url)}
+                    className={cn(
+                      "mt-auto flex items-center justify-between w-full px-4 py-3",
+                      "text-sm border rounded-lg transition-colors duration-200",
+                      "hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-200"
+                    )}
+                  >
+                    <span>PDF 다운로드</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </button>
                 </div>
-                <Download className="w-6 h-6 opacity-60 group-hover:opacity-100 transition-opacity" />
-              </div>
-            </button>
-          ))}
-        </div>
+              </CardContent>
+            </Card>
+          )
+        })}
       </div>
-    </Card>
+    </div>
   )
 }
 

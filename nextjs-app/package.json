@@ -20,8 +20,6 @@
     "@radix-ui/react-slot": "^1.1.1",
     "@radix-ui/react-tabs": "^1.1.2",
     "@react-google-maps/api": "^2.20.5",
-    "@react-three/drei": "9.88.7",
-    "@react-three/fiber": "8.15.11",
     "@sanity/client": "^6.22.5",
     "@sanity/image-url": "^1.1.0",
     "@sanity/uuid": "^3.0.2",
@@ -58,6 +56,7 @@
   },
   "devDependencies": {
     "eslint": "^8.57.0",
-    "eslint-config-next": "^15.0.3"
+    "eslint-config-next": "^15.0.3",
+    "tailwind-scrollbar": "^3.1.0"
   }
 }

@@ -1,13 +1,12 @@
 'use client'
 
-import { Button } from '@/components/ui/button'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import Header from '../components/Header'
 import NewsContent from '../components/NewsContent'
 import NewsFeed from '../components/NewsFeed'
 import NewsTable from '../components/NewsTable'
+import Pagination from '../components/portfolio/Pagination'
 import { useMediaQuery } from '../hooks/use-media-query'
 
 // Generate 100 mock news items
@@ -70,13 +69,29 @@ export default function NewsPage() {
     setSelectedNews(id);
   }
 
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+    const leftColumn = document.querySelector('.overflow-y-auto');
+    if (leftColumn) {
+      leftColumn.scrollTop = 0;
+    }
+    const rightColumn = document.getElementById('right-column');
+    if (rightColumn) {
+      rightColumn.scrollTop = 0;
+    }
+  };
+
   return (
     <div className="min-h-screen bg-white">
       <Header />
       <main className="pt-[var(--header-height)]">
-        <div className="container mx-auto px-4 py-8">
+        <div className="container mx-auto px-4 pb-8">
           <div className="flex flex-col md:flex-row">
-            <div className="w-full md:w-1/2 md:pr-4 border-r overflow-y-auto" style={{ height: 'calc(100vh - 4rem)' }}>
+            <div className="w-full md:w-1/2  border-r overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent hover:scrollbar-thumb-gray-400" style={{ height: 'calc(100vh - 4rem)' }}>
               {isMobile ? (
                 <NewsFeed 
                   news={currentNews}
@@ -91,37 +106,12 @@ export default function NewsPage() {
                 />
               )}
               {/* Pagination */}
-              <div className="mt-8 flex justify-center items-center gap-4">
-                <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
-                  disabled={currentPage === 1}
-                >
-                  <ChevronLeft className="h-4 w-4" />
-                </Button>
-                
-                <div className="flex gap-2">
-                  {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-                    <Button
-                      key={page}
-                      variant={currentPage === page ? "default" : "outline"}
-                      size="sm"
-                      onClick={() => setCurrentPage(page)}
-                    >
-                      {page}
-                    </Button>
-                  ))}
-                </div>
-
-                <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
-                  disabled={currentPage === totalPages}
-                >
-                  <ChevronRight className="h-4 w-4" />
-                </Button>
+              <div className="mt-8">
+                <Pagination
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  onPageChange={handlePageChange}
+                />
               </div>
             </div>
             <div className="w-full md:w-1/2 md:pl-4 md:sticky md:top-16" style={{ height: 'calc(100vh - 4rem)' }}>

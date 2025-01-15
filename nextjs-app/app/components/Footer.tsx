@@ -20,13 +20,13 @@ const supportLinks = [
 export default function Footer() {
   return (
     <footer className="bg-black text-white border-t border-gray-800">
-      <div className="container mx-auto px-4 pt-12 pb-4">
+      <div className="container mx-auto pt-12 pb-4">
         <div className="flex flex-col md:flex-row justify-between items-start">
           {/* Logo */}
           <div className="mb-8 md:mb-0">
             <Link href="/" className="w-[80px] h-[30px] relative block">
               <Image
-                src="https://fvowvmrpscdksrlozbxu.supabase.co/storage/v1/object/public/images/sein_logo_1.png"
+                src="/images/Sein_logo.png"
                 alt="SEIN Logo"
                 fill
                 priority

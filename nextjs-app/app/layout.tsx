@@ -19,7 +19,7 @@ export default function RootLayout({
 }) {
   const [isAtTop, setIsAtTop] = useState(true)
   const pathname = usePathname()
-  const isHomePage = pathname === '/about'
+  const isHomePage = pathname === '/about' 
 
   useEffect(() => {
     const handleScroll = () => {
