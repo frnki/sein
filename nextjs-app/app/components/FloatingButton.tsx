@@ -18,7 +18,7 @@ export default function FloatingButton({ onClick }: FloatingButtonProps) {
     >
       <ShoppingCart className="w-6 h-6" />
       {selectedProducts.length > 0 && (
-        <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs">
+        <span className="absolute -top-6   -right-6 !bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs">
           {selectedProducts.length}
         </span>
       )}

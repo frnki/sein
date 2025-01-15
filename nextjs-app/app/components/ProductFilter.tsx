@@ -34,7 +34,7 @@ export default function ProductFilter({ filters, onFilterChange }: ProductFilter
 
   return (
     <div className="w-64 bg-white border-r sticky top-[64px] h-[calc(100vh-64px)]">
-      <div className="p-4">
+      <div className="p-4 pl-0">
         <h2 className="text-lg font-semibold mb-4">필터</h2>
         <Accordion type="multiple" defaultValue={defaultExpandedFilters} className="space-y-2">
           {filters.map((filter) => (

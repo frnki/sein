@@ -6,10 +6,10 @@ export default function Header({ className = "" }: { className?: string }) {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 py-4  bg-white border-b transition-all duration-300 ${className}`}
+      className={` fixed top-0 left-0 right-0 z-50 py-4  bg-white border-b transition-all duration-300 ${className}`}
     >
       <nav className="container mx-auto flex items-center justify-between">
-        <Link href="/" className="w-[80px] h-[30px] relative">
+        <Link href="/" className="w-[80px] h-[30px] relative cursor-pointer">
           <Image
             src="/images/Sein_logo.png"
             alt="SEIN Logo"
@@ -20,31 +20,31 @@ export default function Header({ className = "" }: { className?: string }) {
         </Link>
 
         <div className="flex space-x-6 text-[13px] font-medium absolute left-1/2 transform -translate-x-1/2">
-          <Link href="/about" className="hover:opacity-60 transition-opacity">
+          <Link href="/about" className="hover:opacity-60 transition-opacity cursor-pointer">
             About
           </Link>
           <Link
             href="/products"
-            className="hover:opacity-60 transition-opacity"
+            className="hover:opacity-60 transition-opacity cursor-pointer"
           >
             Products
           </Link>
           <Link
             href="/projects"
-            className="hover:opacity-60 transition-opacity"
+            className="hover:opacity-60 transition-opacity cursor-pointer"
           >
             Projects
           </Link>
-          <Link href="/news" className="hover:opacity-60 transition-opacity">
+          <Link href="/news" className="hover:opacity-60 transition-opacity cursor-pointer">
             News
           </Link>
         </div>
 
         <div className="flex space-x-6 text-[13px] font-medium">
-          <Link href="/download" className="hover:opacity-60 transition-opacity">
+          <Link href="/download" className="hover:opacity-60 transition-opacity cursor-pointer">
             Download
           </Link>
-          <Link href="/contact" className="hover:opacity-60 transition-opacity">
+          <Link href="/contact" className="hover:opacity-60 transition-opacity cursor-pointer">
             Contact
           </Link>
         </div>

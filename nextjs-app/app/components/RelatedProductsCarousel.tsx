@@ -1,10 +1,10 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import useEmblaCarousel from 'embla-carousel-react'
+import { ImageIcon } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
-import { Button } from '@/components/ui/button'
+import { useState } from 'react'
 
 // Mock related products
 const relatedProducts = [
@@ -44,52 +44,50 @@ interface RelatedProductsCarouselProps {
   category: string
 }
 
+const ImageWithFallback = ({ src, alt, ...props }: any) => {
+  const [error, setError] = useState(false)
+
+  return (
+    <>
+      {error ? (
+        <div className="w-full h-full flex items-center justify-center bg-gray-100">
+          <ImageIcon className="w-12 h-12 text-gray-400" />
+        </div>
+      ) : (
+        <Image
+          src={src}
+          alt={alt}
+          onError={() => setError(true)}
+          {...props}
+        />
+      )}
+    </>
+  )
+}
+
 export default function RelatedProductsCarousel({ category }: RelatedProductsCarouselProps) {
-  const [currentIndex, setCurrentIndex] = useState(0)
-  const [isMobile, setIsMobile] = useState(false)
-
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768)
+  const [emblaRef, emblaApi] = useEmblaCarousel({
+    align: 'start',
+    slidesToScroll: 1,
+    breakpoints: {
+      '(min-width: 768px)': { slidesToScroll: 3 }
     }
-    checkMobile()
-    window.addEventListener('resize', checkMobile)
-    return () => window.removeEventListener('resize', checkMobile)
-  }, [])
-
-  const nextSlide = () => {
-    setCurrentIndex((prevIndex) =>
-      prevIndex === relatedProducts.length - 1 ? 0 : prevIndex + 1
-    )
-  }
-
-  const prevSlide = () => {
-    setCurrentIndex((prevIndex) =>
-      prevIndex === 0 ? relatedProducts.length - 1 : prevIndex - 1
-    )
-  }
-
+  })
+  
   return (
     <div className="mt-24">
       <h2 className="text-2xl font-bold mb-8">다른 {category} 제품</h2>
       <div className="relative">
-        <div className="overflow-hidden">
-          <div
-            className="flex transition-transform duration-300 ease-in-out"
-            style={{
-              transform: `translateX(-${currentIndex * (100 / (isMobile ? 1 : 3))}%)`,
-            }}
-          >
+        <div className="overflow-hidden" ref={emblaRef}>
+          <div className="flex space-x-4">
             {relatedProducts.map((product) => (
               <div
                 key={product.id}
-                className={`flex-shrink-0 w-full ${
-                  isMobile ? 'w-full' : 'w-1/3'
-                } px-2`}
+                className="flex-[0_0_140px] "
               >
                 <Link href={`/products/${product.id}`} className="block group">
-                  <div className="relative aspect-4/3 overflow-hidden rounded-lg mb-4">
-                    <Image
+                  <div className="relative w-[140px] aspect-square overflow-hidden rounded-lg mb-4">
+                    <ImageWithFallback
                       src={product.image}
                       alt={product.name}
                       fill
@@ -103,23 +101,7 @@ export default function RelatedProductsCarousel({ category }: RelatedProductsCar
               </div>
             ))}
           </div>
-        </div>
-        <Button
-          variant="ghost"
-          size="icon"
-          className="absolute top-1/2 left-0 transform -translate-y-1/2"
-          onClick={prevSlide}
-        >
-          <ChevronLeft className="h-6 w-6" />
-        </Button>
-        <Button
-          variant="ghost"
-          size="icon"
-          className="absolute top-1/2 right-0 transform -translate-y-1/2"
-          onClick={nextSlide}
-        >
-          <ChevronRight className="h-6 w-6" />
-        </Button>
+        </div> 
       </div>
     </div>
   )

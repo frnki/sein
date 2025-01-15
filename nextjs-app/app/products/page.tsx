@@ -2,6 +2,8 @@
 
 import { useState } from 'react'
 import FeaturedCarousel from '../components/FeaturedCarousel'
+
+import FloatingCartButton from '../components/FloatingCartButton'
 import Header from '../components/Header'
 import InquiryDialog from '../components/InquiryDialog'
 import ProductFilter from '../components/ProductFilter'
@@ -104,7 +106,7 @@ export default function ProductsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white relative">
       <Header />
       <div className="pt-[var(--header-height)]">
         <FeaturedCarousel />
@@ -130,6 +132,7 @@ export default function ProductsPage() {
         </div>
         <InquiryDialog />
       </div>
+      <FloatingCartButton onClick={() => setShowSelectedPanel(true)} />
     </div>
   )
 }
