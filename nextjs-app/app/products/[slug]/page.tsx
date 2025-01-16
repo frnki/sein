@@ -1,5 +1,6 @@
 "use client";
 
+import ImageGallery from "@/app/components/ImageGallery";
 import SelectedProductsPanel from "@/app/components/SelectedProductsPanel";
 import { Button } from "@/components/ui/button";
 import { client } from '@/sanity/lib/client';
@@ -56,6 +57,7 @@ export default function ProductDetail({ params }: { params: Promise<{ slug: stri
   const [showSelectedPanel, setShowSelectedPanel] = useState(false);
   const [product, setProduct] = useState<Product | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [showGallery, setShowGallery] = useState(false);
 
   useEffect(() => {
     const checkMobile = () => {
@@ -137,7 +139,10 @@ export default function ProductDetail({ params }: { params: Promise<{ slug: stri
             {/* Left: Product Images */}
             <div className="col-span-2 space-y-6">
               {/* Main Image */}
-              <div className="relative aspect-square w-full overflow-hidden rounded-lg ">
+              <div 
+                className="relative aspect-square w-full overflow-hidden rounded-lg cursor-zoom-in"
+                onClick={() => setShowGallery(true)}
+              >
                 <Image
                   src={images[selectedImage] || '/placeholder.jpg'}
                   alt={`${product.name} view ${selectedImage + 1}`}
@@ -256,6 +261,14 @@ export default function ProductDetail({ params }: { params: Promise<{ slug: stri
           )}
         </div>
       </Button>
+
+      {showGallery && (
+        <ImageGallery
+          images={images}
+          initialIndex={selectedImage}
+          onClose={() => setShowGallery(false)}
+        />
+      )}
     </div>
   );
 }

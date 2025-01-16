@@ -1,8 +1,11 @@
 'use client'
 
+import { useProductStore } from '@/app/lib/store';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
 import { client } from '@/sanity/lib/client';
 import useEmblaCarousel from 'embla-carousel-react';
-import { ImageIcon } from 'lucide-react';
+import { ImageIcon, ShoppingCart } from 'lucide-react';
 import { groq } from 'next-sanity';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -45,6 +48,7 @@ const ImageWithFallback = ({ src, alt, ...props }: any) => {
 export default function RelatedProductsCarousel({ series, currentProductId }: RelatedProductsCarouselProps) {
   const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const { addProduct, removeProduct, selectedProducts } = useProductStore();
 
   const [emblaRef, emblaApi] = useEmblaCarousel({
     align: 'start',
@@ -101,27 +105,61 @@ export default function RelatedProductsCarousel({ series, currentProductId }: Re
       <h2 className="text-2xl font-bold mb-4">다른 {series.name} 제품</h2>
       <div className="relative">
         <div className="overflow-hidden" ref={emblaRef}>
-          <div className="flex space-x-4">
-            {relatedProducts.map((product) => (
-              <div
-                key={product._id}
-                className="flex-[0_0_140px]"
-              >
-                <Link href={`/products/${product.slug}`} className="block group">
-                  <div className="relative w-[140px] aspect-square overflow-hidden rounded-lg mb-4">
-                    <ImageWithFallback
-                      src={product.imageUrl || '/placeholder.jpg'}
-                      alt={product.name}
-                      fill
-                      className="object-contain transition-transform duration-700 group-hover:scale-110"
-                    />
-                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300" />
-                  </div>
-                  <h3 className="font-semibold mb-1">{product.name}</h3>
-                  <p className="text-sm text-gray-600">{product.code}</p>
-                </Link>
-              </div>
-            ))}
+          <div className="flex space-x-6">
+            {relatedProducts.map((product) => {
+              const isSelected = selectedProducts.some(p => p.id === product._id);
+              
+              return (
+                <div
+                  key={product._id}
+                  className="flex-[0_0_280px]"
+                >
+                  <Card className="group relative h-full overflow-hidden">
+                    <Link href={`/products/${product.slug}`}>
+                      <div className="relative aspect-square overflow-hidden">
+                        <ImageWithFallback
+                          src={product.imageUrl || '/placeholder.jpg'}
+                          alt={product.name}
+                          fill
+                          className="object-contain transition-transform duration-300 group-hover:scale-105"
+                        />
+                      </div>
+                      <div className="p-4">
+                        <h3 className="font-semibold text-lg mb-1 group-hover:text-primary transition-colors">
+                          {product.name}
+                        </h3>
+                        <p className="text-sm text-gray-600">{product.code}</p>
+                      </div>
+                    </Link>
+                    
+                    {/* Cart Button */}
+                    <Button
+                      variant={isSelected ? "secondary" : "outline"}
+                      size="icon"
+                      className="absolute bottom-3 right-3 w-8 h-8 rounded-full"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        if (isSelected) {
+                          removeProduct(product._id);
+                        } else {
+                          addProduct({
+                            id: product._id,
+                            code: product.code,
+                            image: product.imageUrl,
+                          });
+                        }
+                      }}
+                      disabled={isSelected}
+                    >
+                      <ShoppingCart className="h-4 w-4" />
+                      <span className="sr-only">
+                        {isSelected ? "장바구니에서 제거" : "장바구니에 추가"}
+                      </span>
+                    </Button>
+                  </Card>
+                </div>
+              );
+            })}
           </div>
         </div> 
       </div>
