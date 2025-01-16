@@ -11,6 +11,7 @@ interface PortfolioGridProps {
 }
 
 export default function PortfolioGrid({ items }: PortfolioGridProps) {
+  console.log("🚀 ~ PortfolioGrid ~ items:", items)
   const router = useRouter();
 
   const container: Variants = {
@@ -39,7 +40,7 @@ export default function PortfolioGrid({ items }: PortfolioGridProps) {
         <motion.div
           key={item.id}
           variants={itemAnimation}
-          onClick={() => router.push(`/project/${item.id}`)}
+          onClick={() => router.push(`/project/${item.slug}`)}
           className="group cursor-pointer"
         >
           <div className="relative aspect-[4/3] overflow-hidden rounded-lg mb-4">

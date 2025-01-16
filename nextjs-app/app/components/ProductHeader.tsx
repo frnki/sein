@@ -17,7 +17,7 @@ export default function ProductHeader({
   onSearch,
 }: Props) {
   return (
-    <div className="sticky top-[57px] bg-white z-40 border-b">
+    <div className="sticky top-[57px] bg-white z-40">
       <div className="p-4">
         <div className="flex items-center justify-between gap-4">
           <div className="relative flex-1">

@@ -1,21 +1,21 @@
-import Image from 'next/image'
-import Link from 'next/link'
+import Image from "next/image";
+import Link from "next/link";
 
 const mainNavLinks = [
-  { title: 'About', href: '/about' },
-  { title: 'Products', href: '/products' },
-  { title: 'Projects', href: '/projects' },
-  { title: 'News', href: '/news' },
-  { title: 'Support', href: '/support' },
-  { title: 'Contact', href: '/contact' },
-]
+  { title: "About", href: "/about" },
+  { title: "Products", href: "/products" },
+  { title: "Projects", href: "/projects" },
+  { title: "News", href: "/news" },
+  { title: "Support", href: "/support" },
+  { title: "Contact", href: "/contact" },
+];
 
 const supportLinks = [
-  { title: '거래가격 공시', href: '/support?tab=transaction-price' },
-  { title: '카탈로그 요청', href: '/support?tab=catalog-request' },
-  { title: 'A/S 접수', href: '/support?tab=service-request' },
-  { title: '온라인 견적 요청', href: '/support?tab=online-quote' },
-]
+  { title: "거래가격 공시", href: "/support?tab=transaction-price" },
+  { title: "카탈로그 요청", href: "/support?tab=catalog-request" },
+  { title: "A/S 접수", href: "/support?tab=service-request" },
+  { title: "온라인 견적 요청", href: "/support?tab=online-quote" },
+];
 
 export default function Footer() {
   return (
@@ -50,7 +50,7 @@ export default function Footer() {
               <ul className="space-y-2">
                 {mainNavLinks.map((link) => (
                   <li key={link.href}>
-                    <Link 
+                    <Link
                       href={link.href}
                       className="text-sm text-gray-300 hover:text-white"
                     >
@@ -67,7 +67,7 @@ export default function Footer() {
               <ul className="space-y-2">
                 {supportLinks.map((link) => (
                   <li key={link.href}>
-                    <Link 
+                    <Link
                       href={link.href}
                       className="text-sm text-gray-300 hover:text-white"
                     >
@@ -81,13 +81,15 @@ export default function Footer() {
         </div>
 
         {/* Copyright */}
-        <div className="mt-8 pt-4 border-t border-gray-800">
+        <div className="mt-8 pt-4 border-t border-gray-800 flex items-center justify-between w-full">
           <p className="text-sm text-gray-400 text-center">
             © {new Date().getFullYear()} SEIN. All rights reserved.
+          </p>
+          <p className="text-sm text-gray-400 text-center">
+            site by <Link href="https://facto-studio.com">FACTO</Link>
           </p>
         </div>
       </div>
     </footer>
-  )
+  );
 }
-

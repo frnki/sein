@@ -15,11 +15,11 @@ interface ProductStore {
 export const useProductStore = create<ProductStore>((set) => ({
   selectedProducts: [],
   isInquiryOpen: false,
-  toggleProduct: (product) =>
+  toggleProduct: (productId) =>
     set((state) => ({
-      selectedProducts: state.selectedProducts.some(p => p.id === product.id)
-        ? state.selectedProducts.filter(p => p.id !== product.id)
-        : [...state.selectedProducts, product],
+      selectedProducts: state.selectedProducts.includes(productId)
+        ? state.selectedProducts.filter(id => id !== productId)
+        : [...state.selectedProducts, productId],
     })),
   addProduct: (product) =>
     set((state) => ({

@@ -1,5 +1,6 @@
 export interface PortfolioItem {
-  id: number;
+  id: string;
+  slug: string;
   code: string;
   title: string;
   image: string;
@@ -21,6 +22,7 @@ export interface CarouselImage {
 // Generate more realistic mock data
 export const portfolioItems: PortfolioItem[] = Array.from({ length: 100 }, (_, i) => ({
   id: i + 1,
+  slug: `SIP-${(1000 + i).toString()}`,
   code: `SIP-${(1000 + i).toString()}`,
   title: [
     '대전 한밭수목원',

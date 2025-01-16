@@ -68,7 +68,7 @@ export default function History() {
   const secondColumn = historyData.slice(4)
 
   return (
-    <div className={`${SECTION_PADDING} bg-neutral-950 text-white`}>
+    <div className={`${SECTION_PADDING} text-white`}>
       <div className={CONTAINER}>
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
@@ -146,7 +146,7 @@ export default function History() {
           <Button
             asChild
             variant="outline"
-            className="border-white text-white hover:bg-white hover:text-black"
+            className="bg-black text-white  z-50"
           >
             <Link href="/history">
               전체 연혁 보기 →
