@@ -2,70 +2,60 @@
 
 import SelectedProductsPanel from "@/app/components/SelectedProductsPanel";
 import { Button } from "@/components/ui/button";
+import { client } from '@/sanity/lib/client';
 import { Share2, ShoppingCart } from "lucide-react";
+import { groq } from 'next-sanity';
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { notFound } from 'next/navigation';
+import { use, useEffect, useState } from "react";
 import InquiryDialog from "../../components/InquiryDialog";
 import RelatedProductsCarousel from "../../components/RelatedProductsCarousel";
 import { useProductStore } from "../../lib/store";
 
-// Mock product data - in real app, this would come from an API
-const product = {
-  id: "sip-387",
-  name: "MEDIUM PIÉ TOTE (Black)",
-  code: "SIP-387",
-  category: "휴게시설물",
-  description: `직물이 움직이는 '석재(piédesta)'의 실루엣에서 영감을 얻어 탄생한 파고라입니다.
+interface Product {
+  _id: string;
+  name: string;
+  code: string;
+  category: { name: string };
+  series?: { _id: string; name: string };
+  description?: string;
+  dimensions?: {
+    width: number;
+    depth: number;
+    height: number;
+    unit: string;
+  };
+  material?: string[];
+  imageUrl?: string;
+  imageUrls?: string[];
+}
 
-유연하고 내구성이 강한 Steel Plate/Pipe와 화강석 등의 소재를 사용했습니다.
-
-세인의 시그니처 디자인은 장인의 섬세한 기술력으로 완성되었습니다.
-
-LED 조명이 적용되어 야간에도 아름다운 공간을 연출할 수 있습니다.`,
-  specs: {
-    code: "SIP-387",
-    size: "W5700 x D2800 x H3000",
-    material:
-      "Steel Plate/Pipe, 화강석, Polycarbonate, Hard Wood, NT Panel, LED",
-    category: "휴게시설물",
+const productQuery = groq`*[_type == "product" && slug.current == $slug][0] {
+  _id,
+  name,
+  code,
+  category->{
+    name
   },
-  images: [
-    "/placeholder.svg?height=800&width=800&text=Image1",
-    "/placeholder.svg?height=800&width=800&text=Image2",
-    "/placeholder.svg?height=800&width=800&text=Image3",
-    "/placeholder.svg?height=800&width=800&text=Image4",
-    "/placeholder.svg?height=800&width=800&text=Image5",
-  ],
-};
+  series->{
+    _id,
+    name
+  },
+  description,
+  dimensions,
+  material,
+  "imageUrl": mainImage.asset->url,
+  "imageUrls": images[].asset->url
+}`
 
-// Mock related products
-const relatedProducts = [
-  {
-    id: "sip-388",
-    name: "친수형 파고라 B-Type",
-    code: "SIP-388",
-    image: "/placeholder.svg?height=400&width=600",
-  },
-  {
-    id: "sip-389",
-    name: "친수형 파고라 C-Type",
-    code: "SIP-389",
-    image: "/placeholder.svg?height=400&width=600",
-  },
-  {
-    id: "sip-390",
-    name: "친수형 파고라 D-Type",
-    code: "SIP-390",
-    image: "/placeholder.svg?height=400&width=600",
-  },
-];
-
-export default function ProductDetail() {
-  const { addProduct, removeProduct, openInquiry, selectedProducts } =
-    useProductStore();
+export default function ProductDetail({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = use(params);
+  const { addProduct, removeProduct, openInquiry, selectedProducts } = useProductStore();
   const [selectedImage, setSelectedImage] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
   const [showSelectedPanel, setShowSelectedPanel] = useState(false);
+  const [product, setProduct] = useState<Product | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const checkMobile = () => {
@@ -76,29 +66,67 @@ export default function ProductDetail() {
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
-  const isProductSelected = selectedProducts.some((p) => p.id === product.id);
+  useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        const data = await client.fetch<Product>(productQuery, { slug });
+        console.log("🚀 ~ fetchProduct ~ data:", data)
+        if (!data?._id) {
+          notFound();
+        }
+        setProduct(data);
+      } catch (error) {
+        console.error('제품 데이터 로딩 실패:', error);
+        notFound();
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchProduct();
+  }, [slug]);
+
+  if (isLoading || !product) {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="text-lg">Loading...</div>
+      </div>
+    );
+  }
+
+  const images = [
+    product.imageUrl,
+    ...(product.imageUrls || [])
+  ].filter(Boolean);
+
+  const isProductSelected = selectedProducts.some((p) => p.id === product._id);
 
   const handleInquiry = () => {
-    // 현재 제품을 선택된 제품에 추가하고 문의 다이얼로그 열기
     addProduct({
-      id: product.id,
+      id: product._id,
       code: product.code,
-      image: product.images[0],
+      image: images[0],
     });
     openInquiry();
   };
 
   const handleAddToCart = () => {
     if (isProductSelected) {
-      removeProduct(product.id);
+      removeProduct(product._id);
     } else {
       addProduct({
-        id: product.id,
+        id: product._id,
         code: product.code,
-        image: product.images[0],
+        image: images[0],
       });
     }
     setShowSelectedPanel(true);
+  };
+
+  const specs = {
+    code: product.code,
+    size: product.dimensions ? `W${product.dimensions.width} x D${product.dimensions.depth} x H${product.dimensions.height} ${product.dimensions.unit}` : '',
+    material: Array.isArray(product.material) ? product.material.join(', ') : '',
+    category: product.category?.name || '',
   };
 
   return (
@@ -109,12 +137,12 @@ export default function ProductDetail() {
             {/* Left: Product Images */}
             <div className="col-span-2 space-y-6">
               {/* Main Image */}
-              <div className="relative aspect-square w-full overflow-hidden rounded-lg bg-gray-100">
+              <div className="relative aspect-square w-full overflow-hidden rounded-lg ">
                 <Image
-                  src={product.images[selectedImage]}
+                  src={images[selectedImage] || '/placeholder.jpg'}
                   alt={`${product.name} view ${selectedImage + 1}`}
                   fill
-                  className="object-cover"
+                  className="object-contain"
                   priority
                 />
               </div>
@@ -123,11 +151,11 @@ export default function ProductDetail() {
               <div className="relative">
                 <div className="overflow-x-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
                   <div className="flex gap-4 pb-2">
-                    {product.images.map((image, index) => (
+                    {images.map((image, index) => (
                       <button
                         key={index}
                         onClick={() => setSelectedImage(index)}
-                        className={`relative flex-shrink-0 w-24 h-24 rounded-lg overflow-hidden 
+                        className={`relative flex-shrink-0 w-24 h-24 rounded-lg overflow-hidden m-1
                           ${
                             selectedImage === index
                               ? "ring-2 ring-black"
@@ -135,10 +163,10 @@ export default function ProductDetail() {
                           }`}
                       >
                         <Image
-                          src={image}
+                          src={image || '/placeholder.jpg'}
                           alt={`${product.name} thumbnail ${index + 1}`}
                           fill
-                          className="object-cover"
+                          className="object-contain"
                         />
                       </button>
                     ))}
@@ -148,7 +176,7 @@ export default function ProductDetail() {
             </div>
 
             {/* Right: Product Info */}
-            <div className="space-y-8">
+            <div className="space-y-6">
               <div className="flex justify-between items-start">
                 <h1 className="text-2xl font-bold">{product.name}</h1>
                 <Button variant="ghost" size="icon">
@@ -159,32 +187,35 @@ export default function ProductDetail() {
               <dl className="max-w-sm space-y-2 text-sm">
                 <div className="grid grid-cols-[100px,1fr] gap-2 items-center py-2 border-b">
                   <dt className="text-gray-600">제품번호</dt>
-                  <dd>{product.specs.code}</dd>
+                  <dd>{specs.code}</dd>
                 </div>
                 <div className="grid grid-cols-[100px,1fr] gap-2 items-center py-2 border-b">
                   <dt className="text-gray-600">카테고리</dt>
-                  <dd>{product.specs.category}</dd>
+                  <dd>{specs.category}</dd>
                 </div>
                 <div className="grid grid-cols-[100px,1fr] gap-2 items-center py-2 border-b">
                   <dt className="text-gray-600">Size</dt>
-                  <dd>{product.specs.size}</dd>
+                  <dd>{specs.size}</dd>
                 </div>
                 <div className="grid grid-cols-[100px,1fr] gap-2 items-center py-2 border-b">
                   <dt className="text-gray-600">Material</dt>
-                  <dd>{product.specs.material}</dd>
+                  <dd>{specs.material}</dd>
                 </div>
               </dl>
 
               <div className="space-y-4 text-gray-600">
-                {product.description.split("\n\n").map((paragraph, index) => (
-                  <p key={index}>{paragraph}</p>
-                ))}
+                {typeof product.description === 'string' ? 
+                  product.description.split("\n\n").map((paragraph, index) => (
+                    <p key={index}>{paragraph}</p>
+                  ))
+                  : null
+                }
               </div>
 
               <div className="flex gap-4">
                 <Button
                   variant={isProductSelected ? "secondary" : "outline"}
-                  className="flex-1 h-12 text-lg"
+                  className="flex-1 h-12 text-base font-semibold"
                   onClick={handleAddToCart}
                   disabled={isProductSelected}
                 >
@@ -192,7 +223,7 @@ export default function ProductDetail() {
                   {isProductSelected ? "추가됨" : "관심 상품 추가"}
                 </Button>
                 <Button
-                  className="flex-1 h-12 text-lg text-white"
+                  className="flex-1 h-12 text-base font-semibold text-white"
                   onClick={handleInquiry}
                 >
                   문의하기
@@ -200,7 +231,10 @@ export default function ProductDetail() {
               </div>
             </div>
           </div>
-          <RelatedProductsCarousel category={product.category} />
+          <RelatedProductsCarousel 
+            series={product.series} 
+            currentProductId={product._id}
+          />
         </div>
       </main>
       <InquiryDialog />

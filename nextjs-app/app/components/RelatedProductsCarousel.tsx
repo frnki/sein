@@ -1,47 +1,24 @@
 'use client'
 
-import useEmblaCarousel from 'embla-carousel-react'
-import { ImageIcon } from 'lucide-react'
-import Image from 'next/image'
-import Link from 'next/link'
-import { useState } from 'react'
+import { client } from '@/sanity/lib/client';
+import useEmblaCarousel from 'embla-carousel-react';
+import { ImageIcon } from 'lucide-react';
+import { groq } from 'next-sanity';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
 
-// Mock related products
-const relatedProducts = [
-  {
-    id: 'sip-388',
-    name: '친수형 파고라 B-Type',
-    code: 'SIP-388',
-    image: '/placeholder.svg?height=400&width=600&text=Product1',
-  },
-  {
-    id: 'sip-389',
-    name: '친수형 파고라 C-Type',
-    code: 'SIP-389',
-    image: '/placeholder.svg?height=400&width=600&text=Product2',
-  },
-  {
-    id: 'sip-390',
-    name: '친수형 파고라 D-Type',
-    code: 'SIP-390',
-    image: '/placeholder.svg?height=400&width=600&text=Product3',
-  },
-  {
-    id: 'sip-391',
-    name: '친수형 파고라 E-Type',
-    code: 'SIP-391',
-    image: '/placeholder.svg?height=400&width=600&text=Product4',
-  },
-  {
-    id: 'sip-392',
-    name: '친수형 파고라 F-Type',
-    code: 'SIP-392',
-    image: '/placeholder.svg?height=400&width=600&text=Product5',
-  },
-]
+interface Product {
+  _id: string;
+  name: string;
+  code: string;
+  "slug": string;
+  "imageUrl": string;
+}
 
 interface RelatedProductsCarouselProps {
-  category: string
+  series?: { _id: string; name: string };
+  currentProductId: string;
 }
 
 const ImageWithFallback = ({ src, alt, ...props }: any) => {
@@ -65,7 +42,10 @@ const ImageWithFallback = ({ src, alt, ...props }: any) => {
   )
 }
 
-export default function RelatedProductsCarousel({ category }: RelatedProductsCarouselProps) {
+export default function RelatedProductsCarousel({ series, currentProductId }: RelatedProductsCarouselProps) {
+  const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
   const [emblaRef, emblaApi] = useEmblaCarousel({
     align: 'start',
     slidesToScroll: 1,
@@ -73,25 +53,67 @@ export default function RelatedProductsCarousel({ category }: RelatedProductsCar
       '(min-width: 768px)': { slidesToScroll: 3 }
     }
   })
+
+  useEffect(() => {
+    const fetchRelatedProducts = async () => {
+      if (!series?._id) {
+        setRelatedProducts([]);
+        setIsLoading(false);
+        return;
+      }
+
+      try {
+        const query = groq`*[_type == "product" && series._ref == $seriesId && _id != $currentProductId] {
+          _id,
+          name,
+          code,
+          "slug": slug.current,
+          "imageUrl": mainImage.asset->url
+        }`;
+        
+        const data = await client.fetch<Product[]>(query, {
+          seriesId: series._id,
+          currentProductId
+        });
+        
+        setRelatedProducts(data);
+      } catch (error) {
+        console.error('관련 제품 로딩 실패:', error);
+        setRelatedProducts([]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchRelatedProducts();
+  }, [series?._id, currentProductId]);
+
+  if (isLoading) {
+    return null;
+  }
+
+  if (!series?.name || relatedProducts.length === 0) {
+    return null;
+  }
   
   return (
     <div className="mt-24">
-      <h2 className="text-2xl font-bold mb-4">다른 {category} 제품</h2>
+      <h2 className="text-2xl font-bold mb-4">다른 {series.name} 제품</h2>
       <div className="relative">
         <div className="overflow-hidden" ref={emblaRef}>
           <div className="flex space-x-4">
             {relatedProducts.map((product) => (
               <div
-                key={product.id}
-                className="flex-[0_0_140px] "
+                key={product._id}
+                className="flex-[0_0_140px]"
               >
-                <Link href={`/products/${product.id}`} className="block group">
+                <Link href={`/products/${product.slug}`} className="block group">
                   <div className="relative w-[140px] aspect-square overflow-hidden rounded-lg mb-4">
                     <ImageWithFallback
-                      src={product.image}
+                      src={product.imageUrl || '/placeholder.jpg'}
                       alt={product.name}
                       fill
-                      className="object-cover transition-transform duration-700 group-hover:scale-110"
+                      className="object-contain transition-transform duration-700 group-hover:scale-110"
                     />
                     <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300" />
                   </div>

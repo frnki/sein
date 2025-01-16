@@ -63,7 +63,6 @@ export default function PortfolioPage() {
       try {
         const fetchedProjects = await client.fetch(projectsQuery)
         setProjects(fetchedProjects || [])
-        console.log("🚀 ~ fetchProjects ~ fetchedProjects:", fetchedProjects)
       } catch (error) {
         console.error('프로젝트 데이터 로딩 실패:', error)
         setProjects([])
