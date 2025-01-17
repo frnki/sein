@@ -1,13 +1,14 @@
 "use client";
 
 import ImageGallery from "@/app/components/ImageGallery";
+import { ProjectCarousel } from "@/app/components/portfolio/ProjectCarousel";
 import SelectedProductsPanel from "@/app/components/SelectedProductsPanel";
 import { Button } from "@/components/ui/button";
-import { client } from '@/sanity/lib/client';
+import { client } from "@/sanity/lib/client";
 import { Share2, ShoppingCart } from "lucide-react";
-import { groq } from 'next-sanity';
+import { groq } from "next-sanity";
 import Image from "next/image";
-import { notFound } from 'next/navigation';
+import { notFound } from "next/navigation";
 import { use, useEffect, useState } from "react";
 import InquiryDialog from "../../components/InquiryDialog";
 import RelatedProductsCarousel from "../../components/RelatedProductsCarousel";
@@ -29,6 +30,18 @@ interface Product {
   material?: string[];
   imageUrl?: string;
   imageUrls?: string[];
+  relatedProjects?: {
+    _id: string;
+    title: string;
+    slug: string;
+    publishedAt: string;
+    image: string;
+    details?: {
+      location?: string;
+      area?: string;
+      year?: string;
+    };
+  }[];
 }
 
 const productQuery = groq`*[_type == "product" && slug.current == $slug][0] {
@@ -46,12 +59,25 @@ const productQuery = groq`*[_type == "product" && slug.current == $slug][0] {
   dimensions,
   material,
   "imageUrl": mainImage.asset->url,
-  "imageUrls": images[].asset->url
-}`
+  "imageUrls": images[].asset->url,
+  "relatedProjects": *[_type == "project" && references(^._id)] {
+    _id,
+    title,
+    "slug": slug.current,
+    publishedAt,
+    "image": mainImage.asset->url,
+    details
+  }
+}`;
 
-export default function ProductDetail({ params }: { params: Promise<{ slug: string }> }) {
+export default function ProductDetail({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
   const { slug } = use(params);
-  const { addProduct, removeProduct, openInquiry, selectedProducts } = useProductStore();
+  const { addProduct, removeProduct, openInquiry, selectedProducts } =
+    useProductStore();
   const [selectedImage, setSelectedImage] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
   const [showSelectedPanel, setShowSelectedPanel] = useState(false);
@@ -72,13 +98,12 @@ export default function ProductDetail({ params }: { params: Promise<{ slug: stri
     const fetchProduct = async () => {
       try {
         const data = await client.fetch<Product>(productQuery, { slug });
-        console.log("🚀 ~ fetchProduct ~ data:", data)
         if (!data?._id) {
           notFound();
         }
         setProduct(data);
       } catch (error) {
-        console.error('제품 데이터 로딩 실패:', error);
+        console.error("제품 데이터 로딩 실패:", error);
         notFound();
       } finally {
         setIsLoading(false);
@@ -95,10 +120,9 @@ export default function ProductDetail({ params }: { params: Promise<{ slug: stri
     );
   }
 
-  const images = [
-    product.imageUrl,
-    ...(product.imageUrls || [])
-  ].filter(Boolean);
+  const images = [product.imageUrl, ...(product.imageUrls || [])].filter(
+    Boolean
+  );
 
   const isProductSelected = selectedProducts.some((p) => p.id === product._id);
 
@@ -126,9 +150,13 @@ export default function ProductDetail({ params }: { params: Promise<{ slug: stri
 
   const specs = {
     code: product.code,
-    size: product.dimensions ? `W${product.dimensions.width} x D${product.dimensions.depth} x H${product.dimensions.height} ${product.dimensions.unit}` : '',
-    material: Array.isArray(product.material) ? product.material.join(', ') : '',
-    category: product.category?.name || '',
+    size: product.dimensions
+      ? `W${product.dimensions.width} x D${product.dimensions.depth} x H${product.dimensions.height} ${product.dimensions.unit}`
+      : "",
+    material: Array.isArray(product.material)
+      ? product.material.join(", ")
+      : "",
+    category: product.category?.name || "",
   };
 
   return (
@@ -139,12 +167,12 @@ export default function ProductDetail({ params }: { params: Promise<{ slug: stri
             {/* Left: Product Images */}
             <div className="col-span-2 space-y-6">
               {/* Main Image */}
-              <div 
+              <div
                 className="relative aspect-square w-full overflow-hidden rounded-lg cursor-zoom-in"
                 onClick={() => setShowGallery(true)}
               >
                 <Image
-                  src={images[selectedImage] || '/placeholder.jpg'}
+                  src={images[selectedImage] || "/placeholder.jpg"}
                   alt={`${product.name} view ${selectedImage + 1}`}
                   fill
                   className="object-contain"
@@ -168,7 +196,7 @@ export default function ProductDetail({ params }: { params: Promise<{ slug: stri
                           }`}
                       >
                         <Image
-                          src={image || '/placeholder.jpg'}
+                          src={image || "/placeholder.jpg"}
                           alt={`${product.name} thumbnail ${index + 1}`}
                           fill
                           className="object-contain"
@@ -209,12 +237,11 @@ export default function ProductDetail({ params }: { params: Promise<{ slug: stri
               </dl>
 
               <div className="space-y-4 text-gray-600">
-                {typeof product.description === 'string' ? 
-                  product.description.split("\n\n").map((paragraph, index) => (
-                    <p key={index}>{paragraph}</p>
-                  ))
-                  : null
-                }
+                {typeof product.description === "string"
+                  ? product.description
+                      .split("\n\n")
+                      .map((paragraph, index) => <p key={index}>{paragraph}</p>)
+                  : null}
               </div>
 
               <div className="flex gap-4">
@@ -236,8 +263,8 @@ export default function ProductDetail({ params }: { params: Promise<{ slug: stri
               </div>
             </div>
           </div>
-          <RelatedProductsCarousel 
-            series={product.series} 
+          <RelatedProductsCarousel
+            series={product.series}
             currentProductId={product._id}
           />
         </div>
@@ -268,6 +295,25 @@ export default function ProductDetail({ params }: { params: Promise<{ slug: stri
           initialIndex={selectedImage}
           onClose={() => setShowGallery(false)}
         />
+      )}
+
+      {product.relatedProjects?.length > 0 && (
+        <div className="mt-20 pb-20">
+          <div className="container mx-auto">
+            <h2 className="text-2xl font-bold mb-8">적용 사례</h2>
+            <ProjectCarousel
+              projects={product.relatedProjects.map(project => ({
+                id: project._id,
+                title: project.title,
+                slug: project.slug,
+                year: project.details?.year || 'N/A',
+                image: project.image || '/placeholder.jpg',
+                location: project.details?.location,
+                size: project.details?.area,
+              }))}
+            />
+          </div>
+        </div>
       )}
     </div>
   );

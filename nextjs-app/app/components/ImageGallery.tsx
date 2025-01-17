@@ -1,9 +1,10 @@
 "use client";
 
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { VisuallyHidden } from "./visually-hidden";
 
 interface ImageGalleryProps {
   images: string[];
@@ -13,6 +14,12 @@ interface ImageGalleryProps {
 
 export default function ImageGallery({ images, initialIndex = 0, onClose }: ImageGalleryProps) {
   const [currentIndex, setCurrentIndex] = useState(initialIndex);
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+    return () => setIsMounted(false);
+  }, []);
 
   const handlePrevious = () => {
     setCurrentIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
@@ -22,11 +29,18 @@ export default function ImageGallery({ images, initialIndex = 0, onClose }: Imag
     setCurrentIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
   };
 
+  if (!isMounted) {
+    return null;
+  }
+
   return (
     <Dialog open onOpenChange={onClose}>
       <DialogContent className="max-w-[95vw] h-[95vh] p-0 bg-white border-none">
+        <VisuallyHidden>
+          <DialogTitle>Image Gallery</DialogTitle>
+        </VisuallyHidden>
         <div className="relative w-full h-full">
-                {/* Navigation buttons */}
+          {/* Navigation buttons */}
           <div className="absolute inset-0 flex items-center justify-between px-4 sm:px-6">
             <button
               onClick={handlePrevious}
