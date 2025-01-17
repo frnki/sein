@@ -1,5 +1,4 @@
 import { defineField, defineType } from 'sanity'
-import { OptimizedImageInput } from '../../components/OptimizedImageInput'
 
 export default defineType({
   name: 'project',
@@ -14,16 +13,11 @@ export default defineType({
       validation: Rule => Rule.required(),
     }),
     defineField({
-      name: 'subtitle',
-      title: '부제목',
-      type: 'string',
-    }),
-    defineField({
       name: 'slug',
       title: 'URL Slug',
       type: 'slug',
       options: {
-        source: 'title',
+        source: doc => `project-${doc._id.slice(-6)}`,
         maxLength: 96,
       },
       validation: Rule => Rule.required(),
@@ -36,12 +30,7 @@ export default defineType({
       type: 'object',
       fields: [
         { name: 'year', title: '연도', type: 'string' },
-        { name: 'location', title: '위치', type: 'string' },
-        { name: 'program', title: '프로그램', type: 'string' },
-        { name: 'area', title: '면적', type: 'string' },
-        { name: 'architect', title: '건축가', type: 'string' },
-        { name: 'team', title: '팀', type: 'string' },
-        { name: 'construction', title: '시공사', type: 'string' },
+        { name: 'client', title: '클라이언트', type: 'string' },
       ],
     }),
 
@@ -64,7 +53,6 @@ export default defineType({
         accept: 'image/*',
         storeOriginalFilename: true,
         metadata: ['blurhash', 'lqip', 'palette'],
-        sources: [OptimizedImageInput],
       },
       validation: Rule => Rule.required(),
     }),
@@ -80,7 +68,6 @@ export default defineType({
             accept: 'image/*',
             storeOriginalFilename: true,
             metadata: ['blurhash', 'lqip', 'palette'],
-            sources: [OptimizedImageInput],
           },
         },
       ],
@@ -101,41 +88,6 @@ export default defineType({
           to: [{ type: 'product' }],
         },
       ],
-    }),
-
-    // 메타 정보
-    defineField({
-      name: 'featured',
-      title: '메인 노출',
-      type: 'boolean',
-      initialValue: false,
-    }),
-    defineField({
-      name: 'order',
-      title: '노출 순서',
-      type: 'number',
-      initialValue: 0,
-    }),
-    defineField({
-      name: 'publishedAt',
-      title: '발행일',
-      type: 'datetime',
-    }),
-
-    // 카테고리 정보
-    defineField({
-      name: 'category',
-      title: '카테고리',
-      type: 'string',
-      options: {
-        list: [
-          { title: '주거', value: 'residential' },
-          { title: '상업', value: 'commercial' },
-          { title: '교육', value: 'education' },
-          { title: '공공', value: 'public' },
-          { title: '리모델링', value: 'remodeling' },
-        ],
-      },
     }),
   ],
   preview: {

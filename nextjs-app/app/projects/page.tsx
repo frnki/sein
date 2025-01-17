@@ -1,11 +1,11 @@
 'use client'
 
 import { client } from '@/sanity/lib/client'
+import { urlForImage } from '@/sanity/lib/image'
 import { groq } from 'next-sanity'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import Header from '../components/Header'
+import FeaturedCarousel from '../components/FeaturedCarousel'
 import Pagination from '../components/portfolio/Pagination'
-import PortfolioCarousel from '../components/portfolio/PortfolioCarousel'
 import PortfolioFilters from '../components/portfolio/PortfolioFilters'
 import PortfolioGrid from '../components/portfolio/PortfolioGrid'
 
@@ -27,8 +27,8 @@ const projectsQuery = groq`*[_type == "project"] {
   featured,
   order,
   publishedAt,
-  "imageUrl": mainImage.asset->url,
-  "images": images[].asset->url
+  mainImage,
+  "images": images[]
 }`
 
 // 기본 캐러셀 이미지
@@ -39,15 +39,6 @@ const DEFAULT_CAROUSEL_IMAGES = [{
   image: '/images/portfolio/default.jpg',
   category: '전체'
 }]
-
-// Project를 CarouselImage로 변환하는 함수
-const projectToCarouselImage = (project: any, index: number) => ({
-  id: index,
-  title: project.title,
-  description: project.subtitle || '',
-  image: project.imageUrl || DEFAULT_CAROUSEL_IMAGES[0].image,
-  category: project.category || '전체'
-})
 
 export default function PortfolioPage() {
   const [projects, setProjects] = useState<any[]>([])
@@ -110,15 +101,16 @@ export default function PortfolioPage() {
       id: parseInt(project._id.replace(/^[^\d]*/, '')) || 0,
       title: project.title,
       code: project.slug || '',
-      image: project.imageUrl || DEFAULT_CAROUSEL_IMAGES[0].image,
+      image: urlForImage(project.mainImage)?.width(800)?.url() || DEFAULT_CAROUSEL_IMAGES[0].image,
       category: project.category || '전체',
-      year: new Date(project.publishedAt).getFullYear(),
+      year: project.details?.year || 0,
       location: project.details?.location || '',
       size: project.details?.area || '',
       tags: [],
       slug: project.slug || ''
     }))
   }, [projects, selectedCategory, selectedYear, searchTerm, sortOrder])
+    
 
   // Pagination
   const totalPages = Math.ceil(filteredAndSortedItems.length / ITEMS_PER_PAGE)
@@ -126,15 +118,6 @@ export default function PortfolioPage() {
     (currentPage - 1) * ITEMS_PER_PAGE,
     currentPage * ITEMS_PER_PAGE
   )
-
-  // Carousel images
-  const carouselImages = useMemo(() => {
-    if (!projects?.length) return DEFAULT_CAROUSEL_IMAGES
-    const featuredProjects = projects.filter(p => p?.featured && p?.imageUrl)
-    return featuredProjects.length > 0 
-      ? featuredProjects.map(projectToCarouselImage)
-      : DEFAULT_CAROUSEL_IMAGES
-  }, [projects])
 
   const handlePageChange = useCallback((page: number) => {
     setCurrentPage(page)
@@ -163,11 +146,9 @@ export default function PortfolioPage() {
 
   return (
     <div className="min-h-screen bg-white">
-      <Header />
       <main className="pt-[var(--header-height)]">
-        <PortfolioCarousel images={carouselImages} />
-        
-        <div className="container mx-auto px-4 py-16 space-y-12">
+        <FeaturedCarousel />
+        <div className="container mx-auto py-12 space-y-12 pb-20">
           <PortfolioFilters
             years={years}
             categories={categories}
@@ -181,7 +162,6 @@ export default function PortfolioPage() {
             onSortChange={handleSortChange}
             onSearchChange={handleSearchChange}
           />
-
           <div className="flex items-center justify-between text-sm text-gray-600 border-b pb-4">
             <div>
               총 <span className="font-bold text-primary">{filteredAndSortedItems.length}</span>개의 프로젝트
@@ -190,9 +170,7 @@ export default function PortfolioPage() {
               페이지 <span className="font-bold text-primary">{currentPage}</span> / {totalPages}
             </div>
           </div>
-
           <PortfolioGrid items={currentItems} />
-
           <Pagination
             currentPage={currentPage}
             totalPages={totalPages}

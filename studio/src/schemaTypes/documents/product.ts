@@ -1,5 +1,4 @@
 import { defineField, defineType } from 'sanity'
-import { OptimizedImageInput } from '../../components/OptimizedImageInput'
 
 export default defineType({
   name: 'product',
@@ -38,7 +37,6 @@ export default defineType({
         accept: 'image/*',
         storeOriginalFilename: true,
         metadata: ['blurhash', 'lqip', 'palette'],
-        sources: [OptimizedImageInput],
       },
       validation: (Rule) => Rule.required(),
     }),
@@ -54,7 +52,6 @@ export default defineType({
             accept: 'image/*',
             storeOriginalFilename: true,
             metadata: ['blurhash', 'lqip', 'palette'],
-            sources: [OptimizedImageInput],
           },
         },
       ],

@@ -54,10 +54,7 @@ export default function ProductGrid({ products }: ProductGridProps) {
             >
               <Image
                 src={
-                  product.imageUrl ||
-                  (product.mainImage
-                    ? urlForImage(product.mainImage).url()
-                    : "/placeholder.jpg")
+                  product.mainImage && urlForImage(product.mainImage)?.url() || "/placeholder.jpg"
                 }
                 alt={product.name}
                 fill
