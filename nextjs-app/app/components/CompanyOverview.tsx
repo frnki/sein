@@ -73,14 +73,13 @@ function HeroSection() {
           transition={{ duration: 1, delay: 0.5 }}
         >
           <h1 className="text-white text-7xl md:text-9xl font-bold leading-tight mb-8">
-            Every Detail Matters
+            Detail is Everything
           </h1>
 
           <div className="space-y-6">
             <p className="text-2xl md:text-4xl text-white font-light">
-              완벽한 디테일이 만드는
-              <br />
-              특별한 공간의 가치
+              Timeless quality <br />
+              Innovated by Design
             </p>
 
             <p className="text-xl text-gray-400">
