@@ -1,5 +1,5 @@
+import type { SelectedProduct } from '@/app/lib/types/product';
 import { create } from 'zustand';
-import { SelectedProduct } from './types/product';
 
 interface ProductStore {
   selectedProducts: SelectedProduct[];
@@ -15,11 +15,11 @@ interface ProductStore {
 export const useProductStore = create<ProductStore>((set) => ({
   selectedProducts: [],
   isInquiryOpen: false,
-  toggleProduct: (productId) =>
+  toggleProduct: (product) =>
     set((state) => ({
-      selectedProducts: state.selectedProducts.includes(productId)
-        ? state.selectedProducts.filter(id => id !== productId)
-        : [...state.selectedProducts, productId],
+      selectedProducts: state.selectedProducts.some(p => p.id === product.id)
+        ? state.selectedProducts.filter(p => p.id !== product.id)
+        : [...state.selectedProducts, product],
     })),
   addProduct: (product) =>
     set((state) => ({

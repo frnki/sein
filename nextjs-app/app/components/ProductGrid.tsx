@@ -39,8 +39,7 @@ export default function ProductGrid({ products }: ProductGridProps) {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 p-6">
       {products.map((product) => {
-        console.log("🚀 ~ {products.map ~ product:", product)
-        const isSelected = selectedProducts.includes(product._id);
+        const isSelected = selectedProducts.some(p => p.id === product._id);
 
         return (
           <div
@@ -78,7 +77,13 @@ export default function ProductGrid({ products }: ProductGridProps) {
 
             {/* Cart Button */}
             <button
-              onClick={() => toggleProduct(product._id)}
+              onClick={() => toggleProduct({
+                id: product._id,
+                name: product.name,
+                code: product.code,
+                category: product.category,
+                image: product.mainImage && urlForImage(product.mainImage)?.url()
+              })}
               className={`
                 absolute bottom-3 right-3 w-8 h-8 rounded-full 
                 flex items-center justify-center

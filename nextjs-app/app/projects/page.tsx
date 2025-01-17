@@ -170,7 +170,10 @@ export default function PortfolioPage() {
               페이지 <span className="font-bold text-primary">{currentPage}</span> / {totalPages}
             </div>
           </div>
-          <PortfolioGrid items={currentItems} />
+          <PortfolioGrid items={currentItems.map(item => ({
+            ...item,
+            id: item.id.toString()
+          }))} />
           <Pagination
             currentPage={currentPage}
             totalPages={totalPages}

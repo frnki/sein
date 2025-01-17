@@ -144,6 +144,7 @@ export default function RelatedProductsCarousel({ series, currentProductId }: Re
                         } else {
                           addProduct({
                             id: product._id,
+                            name: product.name,
                             code: product.code,
                             image: product.imageUrl,
                           });

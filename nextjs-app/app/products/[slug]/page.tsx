@@ -120,15 +120,15 @@ export default function ProductDetail({
     );
   }
 
-  const images = [product.imageUrl, ...(product.imageUrls || [])].filter(
-    Boolean
-  );
+  const images = [product.imageUrl, ...(product.imageUrls || [])]
+    .filter((img): img is string => !!img);
 
   const isProductSelected = selectedProducts.some((p) => p.id === product._id);
 
   const handleInquiry = () => {
     addProduct({
       id: product._id,
+      name: product.name,
       code: product.code,
       image: images[0],
     });
@@ -141,6 +141,7 @@ export default function ProductDetail({
     } else {
       addProduct({
         id: product._id,
+        name: product.name,
         code: product.code,
         image: images[0],
       });
@@ -297,12 +298,12 @@ export default function ProductDetail({
         />
       )}
 
-      {product.relatedProjects?.length > 0 && (
+      {(product.relatedProjects?.length ?? 0) > 0 && (
         <div className="mt-20 pb-20">
           <div className="container mx-auto">
             <h2 className="text-2xl font-bold mb-8">적용 사례</h2>
             <ProjectCarousel
-              projects={product.relatedProjects.map(project => ({
+              projects={(product.relatedProjects ?? []).map(project => ({
                 id: project._id,
                 title: project.title,
                 slug: project.slug,

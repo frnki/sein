@@ -3,7 +3,7 @@
 import { client } from '@/sanity/lib/client'
 import { groq } from 'next-sanity'
 import { useSearchParams } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 import Header from '../components/Header'
 import NewsContent from '../components/NewsContent'
 import NewsFeed from '../components/NewsFeed'
@@ -25,7 +25,7 @@ const newsQuery = groq`*[_type == "news"] | order(publishedAt desc) {
   content
 }`
 
-export default function NewsPage() {
+function NewsPageContent() {
   const [news, setNews] = useState<NewsItem[]>([])
   const [currentPage, setCurrentPage] = useState(1)
   const [selectedNews, setSelectedNews] = useState<string | null>(null)
@@ -154,13 +154,34 @@ export default function NewsPage() {
             </div>
             <div className="w-full md:w-2/3 md:pl-4 md:sticky md:top-16" style={{ height: 'calc(100vh - 4rem)' }}>
               <div id="right-column" className="overflow-y-auto h-full">
-                {formattedSelectedNews && <NewsContent news={formattedSelectedNews} />}
+                <Suspense fallback={<div>Loading...</div>}>
+                  {formattedSelectedNews && <NewsContent news={formattedSelectedNews} />}
+                </Suspense>
               </div>
             </div>
           </div>
         </div>
       </main>
     </div>
+  )
+}
+
+export default function NewsPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-white">
+        <Header />
+        <main className="pt-[var(--header-height)]">
+          <div className="container mx-auto px-4 pb-8">
+            <div className="flex items-center justify-center h-[calc(100vh-var(--header-height))]">
+              <div className="text-lg">Loading...</div>
+            </div>
+          </div>
+        </main>
+      </div>
+    }>
+      <NewsPageContent />
+    </Suspense>
   )
 }
 

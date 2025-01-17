@@ -21,7 +21,7 @@ export interface CarouselImage {
 
 // Generate more realistic mock data
 export const portfolioItems: PortfolioItem[] = Array.from({ length: 100 }, (_, i) => ({
-  id: i + 1,
+  id: (i + 1).toString(),
   slug: `SIP-${(1000 + i).toString()}`,
   code: `SIP-${(1000 + i).toString()}`,
   title: [

@@ -46,7 +46,7 @@ export default function SelectedProductsPanel({ onClose }: SelectedProductsPanel
             {selectedProducts.map((product) => (
               <div key={product.id} className="flex items-center gap-2 border rounded p-2">
                 <Image
-                  src={product.image}
+                  src={product.image || '/placeholder.jpg'}
                   alt={product.code}
                   width={60}
                   height={60}

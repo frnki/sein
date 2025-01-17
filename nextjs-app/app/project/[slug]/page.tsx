@@ -57,10 +57,19 @@ async function getProjectData(slug: string) {
       },
       description: Array.isArray(project.description) ? project.description : [],
       mainImageUrl: urlForImage(project.mainImage)?.width(1200)?.url() || null,
-      images: (project.images || []).map(image => 
+      images: (project.images || []).map((image: any) => 
         urlForImage(image)?.width(1000)?.url() || null
       ).filter(Boolean),
-      products: (project.products || []).map(product => ({
+      products: (project.products || []).map((product: {
+        _id: string;
+        name: string;
+        code: string;
+        slug: string;
+        mainImage: any;
+        images: any[];
+        categorySlug: string;
+        seriesSlug: string;
+      }) => ({
         ...product,
         href: `/product/${product.slug || ''}`,
         categoryHref: `/category/${product.categorySlug || ''}`,
@@ -70,7 +79,12 @@ async function getProjectData(slug: string) {
           urlForImage(image)?.width(800)?.url() || null
         ).filter(Boolean)
       })),
-      otherProjects: (project.otherProjects || []).map(project => ({
+      otherProjects: (project.otherProjects || []).map((project: {
+        _id: string;
+        title: string;
+        slug: string;
+        mainImage: any;
+      }) => ({
         ...project,
         href: `/project/${project.slug || ''}`,
         imageUrl: urlForImage(project.mainImage)?.width(800)?.url() || null
