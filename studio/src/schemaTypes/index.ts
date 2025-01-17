@@ -1,5 +1,6 @@
 import category from './documents/category'
 import material from './documents/material'
+import news from './documents/news'
 import page from './documents/page'
 import person from './documents/person'
 import post from './documents/post'
@@ -26,6 +27,7 @@ export const schemaTypes = [
   category,
   series,
   material,
+  news,
   // Objects
   blockContent,
   infoSection,

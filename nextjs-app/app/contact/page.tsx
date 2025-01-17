@@ -9,30 +9,77 @@ import OnlineQuoteSection from "../components/support/OnlineQuoteSection";
 import ServiceRequestSection from "../components/support/ServiceRequestSection";
 
 export function LocationSection() {
+  const handleLocationClick = (type: 'headquarters' | 'factory') => {
+    const urls = {
+      headquarters: 'https://map.naver.com/p/search/%EC%98%81%EB%93%B1%ED%8F%AC%EB%A1%9C5%EA%B8%B8%2019',
+      factory: 'https://map.naver.com/p/search/%ED%8C%8C%EC%A3%BC%EC%8B%9C%20%EC%86%8C%EB%9D%BC%EC%A7%80%EB%A1%9C%2063-25'
+    }
+    window.open(urls[type], '_blank')
+  }
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
+      <div className="flex  gap-20">
+      {/* 본사 정보 */}
       <div className="space-y-4">
-        <h2 className="text-lg font-medium">본사</h2>
-        <div className="space-y-2 text-gray-600">
-          <p>서울특별시 강남구 테헤란로 123</p>
-          <p>전화: 02-1234-5678</p>
-          <p>팩스: 02-1234-5679</p>
+        <h2 className="text-2xl font-bold">본사</h2>
+        <div className="space-y-2">
+          <p className="text-lg">(07275) 서울특별시 영등포구 영등포로5길 19</p>
+          <p className="text-gray-600">동아프라임밸리 702호</p>
+          <button
+            onClick={() => handleLocationClick('headquarters')}
+            className="mt-4 px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 transition-colors"
+          >
+            위치보기
+          </button>
         </div>
       </div>
 
-      <div className="h-[400px] w-full bg-gray-100 rounded-lg">
-        {/* 카카오맵이나 구글맵 컴포넌트가 들어갈 자리 */}
-        <div className="w-full h-full flex items-center justify-center text-gray-500">
-          지도가 표시될 영역
+      {/* 공장 정보 */}
+      <div className="space-y-4">
+        <h2 className="text-2xl font-bold">공장</h2>
+        <div className="space-y-2">
+          <p className="text-lg">(10863) 경기도 파주시 소라지로 63-25, 1동</p>
+          <p className="text-gray-600">(신촌동24-3)</p>
+          <button
+            onClick={() => handleLocationClick('factory')}
+            className="mt-4 px-4 py-2 bg-gray-100 text-gray-800 rounded hover:bg-gray-200 transition-colors"
+          >
+            위치보기
+          </button>
+        </div>
+      </div>
+      </div>
+      {/* 연락처 정보 */}
+      <div className="space-y-4">
+        <h2 className="text-2xl font-bold">연락처</h2>
+        <div className="space-y-2">
+          <div>
+            <span className="font-medium">TEL:</span>
+            <span className="ml-2">02-877-8811</span>
+          </div>
+          <div>
+            <span className="font-medium">FAX:</span>
+            <span className="ml-2">02-877-8812</span>
+          </div>
+          <div>
+            <span className="font-medium">E-MAIL:</span>
+            <span className="ml-2">seined@naver.com</span>
+          </div>
         </div>
       </div>
 
-      <div className="space-y-4">
-        <h3 className="font-medium">대중교통 이용시</h3>
-        <div className="space-y-2 text-gray-600">
-          <p>지하철: 2호선 강남역 3번 출구에서 도보 5분</p>
-          <p>버스: 강남역 버스정류장 하차</p>
-        </div>
+      {/* 지도 */}
+      <div className="h-[400px] w-full bg-gray-100 rounded-lg overflow-hidden">
+        <iframe 
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3164.7598897094874!2d126.91716687677162!3d37.51731897205442!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x357c9f3aa0749d3d%3A0x7e2e0ca8f0c8a0a0!2z7ISc7Jq47Yq567OE7IucIOyYgeuTse2PrOq1rCDsmIHrk7Htj6zroZwz6rCA!5e0!3m2!1sko!2skr!4v1642432988000!5m2!1sko!2skr"
+          width="100%"
+          height="100%"
+          style={{ border: 0 }}
+          allowFullScreen
+          loading="lazy"
+          referrerPolicy="no-referrer-when-downgrade"
+        />
       </div>
     </div>
   );

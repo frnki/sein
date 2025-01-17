@@ -59,7 +59,7 @@ export default function BrandValues() {
               className="group"
             >
               <div className="bg-neutral-900/30 backdrop-blur-sm rounded-2xl overflow-hidden border border-neutral-800/50 hover:border-neutral-700/70 transition-all duration-500 hover:shadow-2xl hover:shadow-blue-900/20">
-                <div className="relative h-64">
+                <div className="relative h-64 overflow-hidden">
                   <Image
                     src={value.image}
                     alt={value.title}

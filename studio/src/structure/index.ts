@@ -19,6 +19,8 @@ export const structure: StructureResolver = (S: any) =>
       S.documentTypeListItem('category').title('Products > Category'),
       S.documentTypeListItem('material').title('Products > Material'),
       S.documentTypeListItem('project').title('Projects'),
+      S.documentTypeListItem('news').title('News'),
+
       // Settings Singleton in order to view/edit the one particular document for Settings.  Learn more about Singletons: https://www.sanity.io/docs/create-a-link-to-a-single-edit-page-in-your-main-document-type-list
       S.listItem()
         .title('Site Settings')

@@ -1,11 +1,11 @@
 interface NewsTableProps {
   news: Array<{
-    id: number
+    id: string
     date: string
     title: string
   }>
-  selectedNews: number | null
-  onNewsSelect: (id: number) => void
+  selectedNews: string | null
+  onNewsSelect: (id: string) => void
 }
 
 export default function NewsTable({ news, selectedNews, onNewsSelect }: NewsTableProps) {
